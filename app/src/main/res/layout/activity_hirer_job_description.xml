@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".hirerJobDescription.HirerJobDescriptionActivity">
+
+    <FrameLayout
+        android:id="@+id/job_category_image_background"
+        android:layout_width="0dp"
+        android:layout_height="200dp"
+        android:background="#F2F2F2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/job_category_image_view"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:layout_constraintBottom_toBottomOf="@+id/job_category_image_background"
+        app:layout_constraintEnd_toEndOf="@+id/job_category_image_background"
+        app:layout_constraintStart_toStartOf="@+id/job_category_image_background"
+        app:layout_constraintTop_toTopOf="@+id/job_category_image_background"
+        tools:srcCompat="@drawable/carpentry" />
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/add_job_toolbar"
+        android:layout_width="0dp"
+        android:layout_height="?actionBarSize"
+        android:background="@android:color/transparent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="?attr/homeAsUpIndicator"
+        app:title=""
+        app:titleTextColor="@color/colorPrimaryDark" />
+
+    <TextView
+        android:id="@+id/job_wage_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/job_category_image_background"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="$40" />
+
+    <TextView
+        android:id="@+id/job_name_label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
+        android:textColor="@android:color/black"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/guideline3"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/job_category_image_background"
+        tools:text="Leaf Blowing" />
+
+    <TextView
+        android:id="@+id/job_date_label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        android:textColor="#707070"
+        android:textSize="17sp"
+        app:layout_constraintStart_toStartOf="@+id/guideline3"
+        app:layout_constraintBaseline_toBaselineOf="@+id/job_name_label"
+        app:layout_constraintEnd_toEndOf="@+id/job_wage_label"
+        tools:text="Jul 14, 2020" />
+
+    <TextView
+        android:id="@+id/job_category_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:textColor="#707070"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/job_name_label"
+        app:layout_constraintTop_toBottomOf="@+id/job_name_label"
+        tools:text="Yard Work" />
+
+    <TextView
+        android:id="@+id/job_description_heading_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:text="Job Description"
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@+id/job_name_label"
+        app:layout_constraintTop_toBottomOf="@+id/job_category_label" />
+
+    <TextView
+        android:id="@+id/job_description_text_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textColor="#707070"
+        android:textSize="13sp"
+        app:layout_constraintEnd_toEndOf="@+id/job_date_label"
+        app:layout_constraintStart_toStartOf="@+id/job_name_label"
+        app:layout_constraintTop_toBottomOf="@+id/job_description_heading_label" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.7" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

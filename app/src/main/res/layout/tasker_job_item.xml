@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="15dp"
+    app:cardCornerRadius="4dp"
+    app:cardElevation="3dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.32" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.9" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.78" />
+
+        <FrameLayout
+            android:id="@+id/job_category_image_background"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:background="@drawable/job_category_background"
+            android:padding="10dp"
+            app:layout_constraintEnd_toStartOf="@+id/guideline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/job_category_image_view"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            app:layout_constraintBottom_toBottomOf="@+id/job_category_image_background"
+            app:layout_constraintEnd_toEndOf="@+id/job_category_image_background"
+            app:layout_constraintStart_toStartOf="@+id/job_category_image_background"
+            app:layout_constraintTop_toTopOf="@+id/job_category_image_background"
+            tools:srcCompat="@drawable/carpentry" />
+
+        <TextView
+            android:id="@+id/job_name_textview"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toStartOf="@+id/guideline2"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/guideline"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/job_date_textview"
+            app:layout_constraintVertical_chainStyle="packed"
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            tools:text="Leaf Blowing" />
+
+        <TextView
+            android:id="@+id/job_date_textview"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toStartOf="@+id/guideline1"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/guideline"
+            app:layout_constraintTop_toBottomOf="@+id/job_name_textview"
+            app:layout_constraintBottom_toTopOf="@+id/job_description_textview"
+            android:textColor="#707070"
+            android:layout_marginTop="1dp"
+            android:textSize="15sp"
+            tools:text="Date: 2 July, 2020" />
+
+        <TextView
+            android:id="@+id/job_description_textview"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toStartOf="@+id/guideline1"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/guideline"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/job_date_textview"
+            android:textColor="#707070"
+            android:layout_marginTop="3dp"
+            android:textSize="13sp"
+            android:lines="3"
+            android:ellipsize="end"
+            tools:text="There are plenty of options for leaf blowers on the market, so how does one narrow down the field? Consider the size and shape of your yard, for starters, and how many leaves tend to drop in a season. Small yards or those with light leaf accumulation can get by with less power " />
+
+        <TextView
+            android:id="@+id/job_status_text_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/yellow"
+            android:textSize="15sp"
+            android:gravity="end"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/guideline2"
+            app:layout_constraintBaseline_toBaselineOf="@+id/job_name_textview"
+            tools:text="Waiting" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>
