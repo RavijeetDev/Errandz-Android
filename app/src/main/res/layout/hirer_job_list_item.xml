@@ -5,8 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginStart="15dp"
-    android:layout_marginTop="15dp"
+    android:layout_marginTop="13dp"
     android:layout_marginEnd="15dp"
+    android:layout_marginBottom="2dp"
     app:cardCornerRadius="4dp"
     app:cardElevation="3dp">
 
@@ -52,44 +53,44 @@
             android:id="@+id/job_name_label"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/job_category_label"
             app:layout_constraintEnd_toStartOf="@+id/guideline1"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/guideline"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/job_category_label"
             app:layout_constraintVertical_chainStyle="packed"
-            android:textColor="@android:color/black"
-            android:textSize="18sp"
-            android:textStyle="bold"
             tools:text="Leaf Blowing" />
 
         <TextView
             android:id="@+id/job_category_label"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textColor="#707070"
             android:layout_marginTop="4dp"
+            android:textColor="#707070"
             android:textSize="15sp"
-            app:layout_constraintTop_toBottomOf="@+id/job_name_label"
+            app:layout_constraintBottom_toTopOf="@+id/job_date_label"
             app:layout_constraintEnd_toStartOf="@+id/guideline1"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/guideline"
-            app:layout_constraintBottom_toTopOf="@+id/job_date_label"
-            tools:text="Yard Work"/>
+            app:layout_constraintTop_toBottomOf="@+id/job_name_label"
+            tools:text="Yard Work" />
 
         <TextView
             android:id="@+id/job_date_label"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textColor="#707070"
             android:layout_marginTop="7dp"
+            android:textColor="#707070"
             android:textSize="15sp"
-            app:layout_constraintTop_toBottomOf="@+id/job_category_label"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/guideline1"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/guideline"
-            app:layout_constraintBottom_toBottomOf="parent"
-            tools:text="Jul 2, 2020"/>
+            app:layout_constraintTop_toBottomOf="@+id/job_category_label"
+            tools:text="Jul 2, 2020" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -99,7 +100,6 @@
             app:layout_constraintStart_toEndOf="@+id/guideline1"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_arrow_forward" />
-
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void checkLoginStatus() {
-        if(Prefs.getInstance().getUserID() != -1) {
+        if(Prefs.getInstance().getUserID() > 0) {
             checkUserType();
         } else {
             Intent intent = new Intent(getApplicationContext(), LoginActivity.class);

@@ -23,4 +23,6 @@ public interface Constants {
             R.drawable.petsitting,
             R.drawable.yardwork
     };
+
+    String FROM_ACTIVITY = "from_activity";
 }

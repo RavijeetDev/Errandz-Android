@@ -8,6 +8,8 @@ public class Review {
 
     private int ID;
 
+    private int reviewerID;
+
     private String reviewerProfilePic;
 
     private String reviewerName;
@@ -21,6 +23,10 @@ public class Review {
     private long reviewDate;
 
     private String review;
+
+    public int getReviewerID() {
+        return reviewerID;
+    }
 
     public int getID() {
         return ID;

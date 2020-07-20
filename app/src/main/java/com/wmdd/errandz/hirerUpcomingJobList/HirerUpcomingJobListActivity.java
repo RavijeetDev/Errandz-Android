@@ -8,14 +8,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.google.android.material.appbar.MaterialToolbar;
 import com.wmdd.errandz.R;
 import com.wmdd.errandz.bean.Job;
 import com.wmdd.errandz.hirerJobDescription.HirerJobDescriptionActivity;
+import com.wmdd.errandz.hirerPastJobDescription.HirerPastJobDescriptionActivity;
 
 import java.util.ArrayList;
 
 public class HirerUpcomingJobListActivity extends AppCompatActivity implements HirerUpcomingJobListAdapter.UpcomingJobItemCLickListener {
 
+    private MaterialToolbar toolbar;
     private RecyclerView upcomingJobsRecyclerView;
     private HirerUpcomingJobListAdapter hirerUpcomingJobListAdapter;
 
@@ -26,6 +29,8 @@ public class HirerUpcomingJobListActivity extends AppCompatActivity implements H
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hirer_upcoming_job);
+        toolbar = findViewById(R.id.upcoming_job_toolbar);
+        toolbar.setTitle("Upcoming Jobs");
 
         upcomingJobsRecyclerView = findViewById(R.id.upcoming_job_recycler_view);
 

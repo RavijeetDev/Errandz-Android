@@ -4,17 +4,16 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 
-public class HirerHomeData {
+public class JobRequestListResponse {
 
-    @SerializedName("number_of_jobs")
-    private int numberOfJobs;
+    @SerializedName("result")
+    private Response response;
 
-    @SerializedName("jobList")
+    @SerializedName("data")
     private ArrayList<JobDescription> jobDescriptionArrayList;
 
-
-    public int getNumberOfJobs() {
-        return numberOfJobs;
+    public Response getResponse() {
+        return response;
     }
 
     public ArrayList<JobDescription> getJobDescriptionArrayList() {

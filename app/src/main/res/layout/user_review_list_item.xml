@@ -5,26 +5,24 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="5dp"
-    app:cardElevation="1dp"
+    app:cardElevation="2dp"
     app:cardCornerRadius="4dp"
     android:background="#FFF">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="13dp">
+        android:padding="15dp">
 
         <FrameLayout
             android:id="@+id/user_profile_container"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_marginTop="25dp"
             android:background="@drawable/profile_image_background"
             android:padding="1dp"
-            app:layout_constraintEnd_toStartOf="@+id/divider"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/user_info_toolbar">
+            app:layout_constraintTop_toTopOf="parent">
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
