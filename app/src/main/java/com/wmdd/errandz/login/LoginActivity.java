@@ -11,12 +11,14 @@ import android.widget.FrameLayout;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.wmdd.errandz.R;
+import com.wmdd.errandz.address.AddressActivity;
+import com.wmdd.errandz.bean.Address;
 import com.wmdd.errandz.bean.Response;
 import com.wmdd.errandz.hirerHome.HirerHomeActivity;
 import com.wmdd.errandz.data.Prefs;
 import com.wmdd.errandz.taskerHomeScreen.TaskerHomeActivity;
 
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener{
+public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     private LoginViewModel loginViewModel;
     private TextInputLayout emailIDTextInputLayout;
@@ -59,7 +61,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onClick(View view) {
 
-        if(view.getId() == R.id.login_button) {
+        if (view.getId() == R.id.login_button) {
             String emailID = emailIDTextInputLayout.getEditText().getText().toString();
             String password = passwordTextInputLayout.getEditText().getText().toString();
 
@@ -70,7 +72,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void showResponse(Response response) {
-        if(response.getStatus().equals("success")) {
+        if (response.getStatus().equals("success")) {
             callHomeScreen();
         } else {
             // show snackbar
@@ -80,12 +82,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private void callHomeScreen() {
         int userType = Prefs.getInstance().getUserType();
-        if(userType == 1) {
-            Intent intent = new Intent(this, HirerHomeActivity.class);
-            startActivity(intent);
-        }else {
-            Intent intent = new Intent(getApplicationContext(), TaskerHomeActivity.class);
-            startActivity(intent);
+        String address = Prefs.getInstance().getFullAddress();
+        if (address.isEmpty()) {
+            Intent addressIntent = new Intent(this, AddressActivity.class);
+            startActivity(addressIntent);
+        } else {
+            if (userType == 1) {
+                Intent intent = new Intent(this, HirerHomeActivity.class);
+                startActivity(intent);
+            } else {
+                Intent intent = new Intent(getApplicationContext(), TaskerHomeActivity.class);
+                startActivity(intent);
+            }
         }
     }
 }

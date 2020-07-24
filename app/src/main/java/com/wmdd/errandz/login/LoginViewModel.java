@@ -42,6 +42,9 @@ public class LoginViewModel extends ViewModel {
                     sharedPreferences.saveUserID(user.getUserID());
                     sharedPreferences.saveEmailID(user.getEmailID());
                     sharedPreferences.saveUserType(user.getUserType());
+                    if(user.getAddress() != null && user.getAddress().getFullAddress() != null) {
+                        sharedPreferences.saveFullAddress(user.getAddress().getFullAddress());
+                    }
 //                    sharedPreferences.saveDateOfBirth(user.getDateOfBirth());
 //                    sharedPreferences.saveProfileImage(user.getProfileImage());
 //                    sharedPreferences.saveUserFirstName(user.getFirstName());

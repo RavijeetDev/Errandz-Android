@@ -64,6 +64,14 @@ public class Prefs {
         return sharedPreferences.getInt("user_type", -1);
     }
 
+    public void saveFullAddress(String fullAddress) {
+        sharedPreferences.edit().putString("full_address", fullAddress).apply();
+    }
+
+    public String getFullAddress() {
+        return sharedPreferences.getString("full_address", "");
+    }
+
 //    public void saveDateOfBirth(String dateOfBirth) {
 //        sharedPreferences.edit().putString("dob", dateOfBirth).apply();
 //    }
