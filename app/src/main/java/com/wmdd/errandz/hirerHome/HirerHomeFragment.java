@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.wmdd.errandz.bean.JobDescription;
 import com.wmdd.errandz.bean.User;
 import com.wmdd.errandz.hirerJobHistoryList.HirerJobHistoryListActivity;
 import com.wmdd.errandz.hirerPostJob.HirerPostJobActivity;
@@ -24,6 +25,8 @@ import com.wmdd.errandz.R;
 import com.wmdd.errandz.hirerUpcomingJobList.HirerUpcomingJobListActivity;
 import com.wmdd.errandz.jobRequestList.JobRequestListActivity;
 import com.wmdd.errandz.jobRequestTaskerInfo.JobRequestUserInfoActivity;
+
+import java.util.ArrayList;
 
 public class HirerHomeFragment extends Fragment implements View.OnClickListener, HirerHomeJobRequestListAdapter.JobItemClickListener {
 
@@ -44,6 +47,8 @@ public class HirerHomeFragment extends Fragment implements View.OnClickListener,
     private HirerHomeJobRequestListAdapter hirerHomeJobRequestListAdapter;
 
     private Callback callback;
+
+    private ArrayList<JobDescription> jobDescriptionArrayList;
 
 
 
@@ -108,6 +113,8 @@ public class HirerHomeFragment extends Fragment implements View.OnClickListener,
         hirerHomeViewModel.getJobArrayList().observe(this, jobs -> {
             if(jobs.size() > 0) {
                 jobRequestListRecyclerView.setVisibility(View.VISIBLE);
+
+                jobDescriptionArrayList = jobs;
                 hirerHomeJobRequestListAdapter.setJobList(jobs);
             }
         });
@@ -140,9 +147,11 @@ public class HirerHomeFragment extends Fragment implements View.OnClickListener,
     }
 
     @Override
-    public void onJobItemClicked(User user) {
+    public void onJobItemClicked(int position) {
         Intent intent = new Intent(getActivity(), JobRequestUserInfoActivity.class);
-        intent.putExtra("USER", user);
+        intent.putExtra("JOB_ID", jobDescriptionArrayList.get(position).getJob().getJobID());
+        intent.putExtra("JOB_STATUS_ID", jobDescriptionArrayList.get(position).getJob().getJobStatusID());
+        intent.putExtra("USER", jobDescriptionArrayList.get(position).getUser());
         startActivity(intent);
     }
 

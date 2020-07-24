@@ -11,9 +11,12 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import com.wmdd.errandz.R;
+import com.wmdd.errandz.bean.JobDescription;
 import com.wmdd.errandz.bean.User;
 
 import com.wmdd.errandz.jobRequestTaskerInfo.JobRequestUserInfoActivity;
+
+import java.util.ArrayList;
 
 public class JobRequestListActivity extends AppCompatActivity implements JobRequestListAdapter.JobItemClickListener {
 
@@ -22,6 +25,8 @@ public class JobRequestListActivity extends AppCompatActivity implements JobRequ
     private RecyclerView jobRequestListRecyclerView;
     private FrameLayout progressBarView;
     private JobRequestListAdapter jobRequestListAdapter;
+
+    private ArrayList<JobDescription> jobDescriptionArrayList;
 
 
     @Override
@@ -47,15 +52,24 @@ public class JobRequestListActivity extends AppCompatActivity implements JobRequ
         jobRequestListViewModel.getJobArrayList().observe(this, jobs -> {
             if (jobs.size() > 0) {
                 progressBarView.setVisibility(View.GONE);
+                this.jobDescriptionArrayList = jobs;
                 jobRequestListAdapter.setJobList(jobs);
             }
         });
     }
 
     @Override
-    public void onJobItemClicked(User user) {
+    public void onJobItemClicked(int position) {
         Intent intent = new Intent(this, JobRequestUserInfoActivity.class);
-        intent.putExtra("USER", user);
+        intent.putExtra("JOB_ID", jobDescriptionArrayList.get(position).getJob().getJobID());
+        intent.putExtra("JOB_STATUS_ID", jobDescriptionArrayList.get(position).getJob().getJobStatusID());
+        intent.putExtra("USER", jobDescriptionArrayList.get(position).getUser());
         startActivity(intent);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        jobRequestListViewModel.makeHirerHomeDataApiCall();
     }
 }

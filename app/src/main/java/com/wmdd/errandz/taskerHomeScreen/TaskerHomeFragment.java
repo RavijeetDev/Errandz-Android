@@ -22,7 +22,8 @@ import com.wmdd.errandz.taskerJobDescription.TaskerJobDescriptionActivity;
 
 import java.util.ArrayList;
 
-public class TaskerHomeFragment extends Fragment implements TaskerHomeUpcomingJobListAdapter.UpcomingJobItemCLickListener {
+public class TaskerHomeFragment extends Fragment implements TaskerHomeUpcomingJobListAdapter.UpcomingJobItemCLickListener,
+        UpcomingApprovedJobListAdapter.UpcomingApprovedJobItemCLickListener {
 
     private View rootView;
 
@@ -37,6 +38,7 @@ public class TaskerHomeFragment extends Fragment implements TaskerHomeUpcomingJo
     private ArrayList<Job> upcomingJobList;
 
     private TaskerHomeUpcomingJobListAdapter taskerHomeUpcomingJobListAdapter;
+    private UpcomingApprovedJobListAdapter upcomingApprovedJobListAdapter;
 
     private TaskerHomeViewModel taskerHomeViewModel;
 
@@ -59,6 +61,11 @@ public class TaskerHomeFragment extends Fragment implements TaskerHomeUpcomingJo
         taskerHomeUpcomingJobListAdapter = new TaskerHomeUpcomingJobListAdapter(this);
         nearbyJobsRecyclerView.setAdapter(taskerHomeUpcomingJobListAdapter);
 
+        approvedJobsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL,
+                false));
+        upcomingApprovedJobListAdapter = new UpcomingApprovedJobListAdapter(this);
+        approvedJobsRecyclerView.setAdapter(upcomingApprovedJobListAdapter);
+
         initializeViewModel();
 
         return rootView;
@@ -70,12 +77,19 @@ public class TaskerHomeFragment extends Fragment implements TaskerHomeUpcomingJo
         progressBarLayout.setVisibility(View.VISIBLE);
 
         taskerHomeViewModel.getApprovedJobList().observe(this, jobList -> {
-
+            approvedJobList = jobList;
+            illustrationImageView.setVisibility(View.GONE);
+            approvedJobsLabel.setVisibility(View.VISIBLE);
+            approvedJobsRecyclerView.setVisibility(View.VISIBLE);
+            upcomingApprovedJobListAdapter.setUpcomingJobList(jobList);
         });
 
         taskerHomeViewModel.getUpcomingJobList().observe(this, jobList -> {
             upcomingJobList = jobList;
-            illustrationImageView.setVisibility(View.VISIBLE);
+            if (approvedJobList == null || approvedJobList.size() == 0)
+                illustrationImageView.setVisibility(View.VISIBLE);
+            else
+                illustrationImageView.setVisibility(View.GONE);
             nearbyJobsLabel.setVisibility(View.VISIBLE);
             nearbyJobsRecyclerView.setVisibility(View.VISIBLE);
             taskerHomeUpcomingJobListAdapter.setUpcomingJobList(jobList);
@@ -112,5 +126,14 @@ public class TaskerHomeFragment extends Fragment implements TaskerHomeUpcomingJo
             taskerHomeViewModel.unsaveJob(upcomingJobList.get(position));
         progressBarLayout.setVisibility(View.VISIBLE);
 
+    }
+
+    @Override
+    public void onApprovedJobItemClicked(int position) {
+        Job job = approvedJobList.get(position);
+        Intent intent = new Intent(getContext(), TaskerJobDescriptionActivity.class);
+        intent.putExtra("JOB_ID", job.getJobID());
+        intent.putExtra("HIRER_ID", job.getHirerID());
+        startActivity(intent);
     }
 }

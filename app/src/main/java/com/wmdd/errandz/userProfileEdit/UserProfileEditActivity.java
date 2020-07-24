@@ -187,6 +187,7 @@ public class UserProfileEditActivity extends AppCompatActivity implements View.O
                         Log.e("AddressLongitude: ", "" + place.getLatLng().longitude);
 
                         address = new com.wmdd.errandz.bean.Address();
+                        address.setAddressID(user.getAddress().getAddressID());
                         address.setFullAddress(fullAddress);
                         address.setStreetAddress("" + house + " " + street);
                         address.setCity(city);

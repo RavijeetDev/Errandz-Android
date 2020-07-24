@@ -1,5 +1,6 @@
 package com.wmdd.errandz.taskersJobs;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,12 +50,15 @@ public class TaskerJobListAdapter extends RecyclerView.Adapter<TaskerJobListAdap
         switch (jobArrayList.get(position).getStatus()) {
             case 1:
                 holder.jobStatusTextView.setText("Waiting");
+                holder.jobStatusTextView.setTextColor(holder.itemView.getContext().getColor(R.color.colorPrimary));
                 break;
             case 2:
                 holder.jobStatusTextView.setText("Approved");
+                holder.jobStatusTextView.setTextColor(holder.itemView.getContext().getColor(R.color.yellow));
                 break;
             case 3:
                 holder.jobStatusTextView.setText("Rejected");
+                holder.jobStatusTextView.setTextColor(Color.RED);
                 break;
         }
 

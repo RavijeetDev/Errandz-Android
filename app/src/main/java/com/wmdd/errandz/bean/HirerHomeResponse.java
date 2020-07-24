@@ -7,7 +7,7 @@ public class HirerHomeResponse {
     @SerializedName("result")
     private Response response;
 
-    @SerializedName("home_data")
+    @SerializedName("data")
     private HirerHomeData hirerHomeData;
 
     public Response getResponse() {

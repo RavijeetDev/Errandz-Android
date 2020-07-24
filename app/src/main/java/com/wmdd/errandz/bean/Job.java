@@ -36,6 +36,9 @@ public class Job implements Parcelable {
 
     private int jobStatusID;
 
+    private Address address;
+
+
     protected Job(Parcel in) {
         jobID = in.readInt();
         jobName = in.readString();
@@ -47,6 +50,7 @@ public class Job implements Parcelable {
         status = in.readInt();
         hirerID = in.readInt();
         jobStatusID = in.readInt();
+        address = in.readParcelable(Address.class.getClassLoader());
     }
 
     public static final Creator<Job> CREATOR = new Creator<Job>() {
@@ -116,6 +120,10 @@ public class Job implements Parcelable {
         this.status = status;
     }
 
+    public Address getAddress() {
+        return address;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -133,5 +141,6 @@ public class Job implements Parcelable {
         dest.writeInt(status);
         dest.writeInt(hirerID);
         dest.writeInt(jobStatusID);
+        dest.writeParcelable(address, flags);
     }
 }

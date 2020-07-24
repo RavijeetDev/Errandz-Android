@@ -2,10 +2,13 @@ package com.wmdd.errandz.taskerJobDescription;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.text.format.DateUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,6 +19,12 @@ import android.widget.RatingBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.google.android.libraries.maps.CameraUpdateFactory;
+import com.google.android.libraries.maps.GoogleMap;
+import com.google.android.libraries.maps.OnMapReadyCallback;
+import com.google.android.libraries.maps.SupportMapFragment;
+import com.google.android.libraries.maps.model.LatLng;
+import com.google.android.libraries.maps.model.MarkerOptions;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.squareup.picasso.Picasso;
 import com.wmdd.errandz.R;
@@ -25,7 +34,11 @@ import com.wmdd.errandz.taskerHomeScreen.TaskerHomeViewModel;
 import com.wmdd.errandz.userInfoWithReviewList.UserInfoWithReviewListActivity;
 import com.wmdd.errandz.util.Constants;
 
-public class TaskerJobDescriptionActivity extends AppCompatActivity {
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
+public class TaskerJobDescriptionActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private MaterialToolbar jobDescriptionToolbar;
     private Menu menu;
@@ -41,9 +54,14 @@ public class TaskerJobDescriptionActivity extends AppCompatActivity {
     private TextView hirerRatingTextView;
     private TextView hirerReviewsCountTextView;
     private TextView jobDescriptionTextView;
+    private TextView hirerAddressHeadingLabel;
+    private TextView hirerAddressTextView;
+    private TextView getDirectionTextView;
+    private CardView hirerMapViewContainer;
     private RatingBar hirerRatingRatingBar;
     private Button applyButton;
     private Button saveButton;
+    private Button startJobButton;
     private FrameLayout progressBarLayout;
     private FrameLayout buttonBackgroundBehindContainer;
 
@@ -53,6 +71,9 @@ public class TaskerJobDescriptionActivity extends AppCompatActivity {
     private User user;
     private int jobID;
     private int hirerID;
+    private GoogleMap myMap;
+
+    private LatLng CANADA = new LatLng(56.1304, -106.3468);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,11 +93,20 @@ public class TaskerJobDescriptionActivity extends AppCompatActivity {
         hirerRatingTextView = findViewById(R.id.hirer_rating_text_view);
         hirerReviewsCountTextView = findViewById(R.id.hirer_reviews_count_text_view);
         jobDescriptionTextView = findViewById(R.id.job_description_text_view);
+        hirerAddressHeadingLabel = findViewById(R.id.hirer_job_address_heading_label);
+        hirerAddressTextView = findViewById(R.id.job_address_text_view);
+        getDirectionTextView = findViewById(R.id.get_direction_text_view);
+        hirerMapViewContainer = findViewById(R.id.hirer_map_view);
         hirerRatingRatingBar = findViewById(R.id.hirer_rating_bar);
         applyButton = findViewById(R.id.apply_button);
         saveButton = findViewById(R.id.save_button);
+        startJobButton = findViewById(R.id.start_job_button);
         progressBarLayout = findViewById(R.id.progress_bar_view);
         buttonBackgroundBehindContainer = findViewById(R.id.button_background_behind_container);
+
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
 
         jobID = getIntent().getIntExtra("JOB_ID", 0);
         hirerID = getIntent().getIntExtra("HIRER_ID", 0);
@@ -149,6 +179,19 @@ public class TaskerJobDescriptionActivity extends AppCompatActivity {
                 }
             }
         });
+
+        getDirectionTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String latLongString = "geo:" + user.getAddress().getLatitude() + "," + user.getAddress().getLongitude();
+                Uri gmmIntentUri = Uri.parse(latLongString);
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                mapIntent.setPackage("com.google.android.apps.maps");
+                if (mapIntent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(mapIntent);
+                }
+            }
+        });
     }
 
     private void initializeJobInfoValues(Job job) {
@@ -173,7 +216,7 @@ public class TaskerJobDescriptionActivity extends AppCompatActivity {
                 jobStatusTextView.setText("Waiting for Approval");
                 break;
             case 2:
-                jobStatusTextView.setText("Approved");
+                setViewsOnJobApproved();
                 break;
             case 3:
                 jobStatusTextView.setText("Rejected");
@@ -183,11 +226,49 @@ public class TaskerJobDescriptionActivity extends AppCompatActivity {
 
         if (job.getStatus() != 0 && job.getStatus() != 4) {
             saveButton.setVisibility(View.GONE);
+
             jobStatusTextView.setVisibility(View.VISIBLE);
+
             applyButton.setVisibility(View.GONE);
+            if (job.getStatus() != 2) {
+                buttonBackgroundBehindContainer.setVisibility(View.GONE);
+            }
+        }
+
+
+    }
+
+    private void setViewsOnJobApproved() {
+        if (checkIfJobIsToday()) {
+            buttonBackgroundBehindContainer.setVisibility(View.VISIBLE);
+            startJobButton.setVisibility(View.VISIBLE);
+            jobStatusTextView.setText("Click on Start Button to start your job.");
+        } else {
+            jobStatusTextView.setText("Approved");
             buttonBackgroundBehindContainer.setVisibility(View.GONE);
         }
 
+        hirerAddressHeadingLabel.setVisibility(View.VISIBLE);
+        hirerAddressTextView.setVisibility(View.VISIBLE);
+        hirerAddressTextView.setText(user.getAddress().getFullAddress());
+        getDirectionTextView.setVisibility(View.VISIBLE);
+        hirerMapViewContainer.setVisibility(View.VISIBLE);
+
+        setUpMap(Double.parseDouble(user.getAddress().getLatitude()),
+                Double.parseDouble(user.getAddress().getLongitude()));
+
+    }
+
+    private boolean checkIfJobIsToday() {
+        try {
+            String jobDate = job.getJobDate();
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMM dd, yyyy", Locale.CANADA);
+            Date date = simpleDateFormat.parse(jobDate);
+            return DateUtils.isToday(date.getTime());
+        } catch (Exception e) {
+
+        }
+        return false;
     }
 
     private void initializeUserInfoValues(User user) {
@@ -196,7 +277,7 @@ public class TaskerJobDescriptionActivity extends AppCompatActivity {
 
         if (user.getTotalRating() > 0) {
             hirerRatingTextView.setText(String.format("%.1f", user.getTotalRating()));
-            hirerRatingRatingBar.setRating(user.getTotalRating()/5);
+            hirerRatingRatingBar.setRating(user.getTotalRating() / 5);
         } else {
             hirerRatingTextView.setText("No Rating");
             hirerRatingRatingBar.setVisibility(View.GONE);
@@ -208,6 +289,24 @@ public class TaskerJobDescriptionActivity extends AppCompatActivity {
         Picasso.get()
                 .load(user.getProfileImage())
                 .into(hirerProfileImageView);
+
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        myMap = googleMap;
+        myMap.moveCamera(CameraUpdateFactory.newLatLng(CANADA));
+        myMap.setMinZoomPreference(2.0f);
+        myMap.setMaxZoomPreference(2.0f);
+    }
+
+    private void setUpMap(double latitude, double longitude) {
+        LatLng position = new LatLng(latitude, longitude);
+        myMap.moveCamera(CameraUpdateFactory.newLatLng(position));
+        myMap.addMarker(new MarkerOptions()
+                .position(position));
+        myMap.setMinZoomPreference(13.0f);
+        myMap.setMaxZoomPreference(13.0f);
 
     }
 }

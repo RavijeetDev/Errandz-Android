@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.wmdd.errandz.api.Api;
 import com.wmdd.errandz.api.ErrandzApi;
+import com.wmdd.errandz.bean.CommonResponse;
 import com.wmdd.errandz.bean.JobInfoResponse;
 import com.wmdd.errandz.bean.Review;
 import com.wmdd.errandz.bean.UserReviewResponse;
@@ -20,10 +21,12 @@ public class JobRequestUserInfoViewModel extends ViewModel {
 
     private ErrandzApi errandzApi;
     private MutableLiveData<ArrayList<Review>> reviewArrayList;
+    private MutableLiveData<com.wmdd.errandz.bean.Response> jobStatusResponse;
 
     public void init() {
         errandzApi = Api.getRetrofitClient().create(ErrandzApi.class);
         reviewArrayList = new MutableLiveData<>();
+        jobStatusResponse = new MutableLiveData<>();
     }
 
     public void makeUserReviewApiCall(int taskerID) {
@@ -48,5 +51,27 @@ public class JobRequestUserInfoViewModel extends ViewModel {
 
     public MutableLiveData<ArrayList<Review>> getReviewArrayList() {
         return reviewArrayList;
+    }
+
+    public void callUpdateJobStatusApi(int status, int jobStatusID, int jobID, int taskerID) {
+
+        errandzApi.updateJobStatus(taskerID, Prefs.getInstance().getUserID(), jobID, status, jobStatusID).enqueue(new Callback<CommonResponse>() {
+            @Override
+            public void onResponse(Call<CommonResponse> call, Response<CommonResponse> response) {
+                if (response.isSuccessful()) {
+                    jobStatusResponse.setValue(response.body().getResponse());
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CommonResponse> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public MutableLiveData<com.wmdd.errandz.bean.Response> getJobStatusResponse() {
+        return jobStatusResponse;
     }
 }

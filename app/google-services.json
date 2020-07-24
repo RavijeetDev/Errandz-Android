@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1010850856287",
+    "firebase_url": "https://errandz-284301.firebaseio.com",
+    "project_id": "errandz-284301",
+    "storage_bucket": "errandz-284301.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1010850856287:android:741c257f15fc2131080aea",
+        "android_client_info": {
+          "package_name": "com.wmdd.errandz"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1010850856287-mdfrtjhgnjb3n8ij42c6j40b64vnm0po.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4dhO5TP0fGOPV1ls7tTo8EusNKYNpmXU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1010850856287-mdfrtjhgnjb3n8ij42c6j40b64vnm0po.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
