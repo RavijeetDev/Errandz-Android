@@ -4,7 +4,10 @@ import com.wmdd.errandz.R;
 
 public interface Constants {
 
-    String LOCAL_BASE_URL = "http://192.168.1.65:3000/";
+    String LOCAL_BASE_URL = "http://192.168.1.80:3000/";  // Local Machine
+
+    // IP for Server Hosted on AWS EC2 Instance
+//    String LOCAL_BASE_URL = "http://54.167.159.136:3000/";
 
     String[] jobCategory = {
             "Carpentry", "Cleaning", "Home Repairs", "Mounting", "Moving", "Organizing",

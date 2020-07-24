@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Errandz</string>
+    <string name="api_key">AIzaSyCkKDtx7ydfO_WCQRU6xIFvEi3O4QLziMY</string>
     <string name="see_more"><u>See More</u></string>
 </resources>

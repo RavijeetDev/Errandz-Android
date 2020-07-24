@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.wmdd.errandz.api.Api;
 import com.wmdd.errandz.api.ErrandzApi;
+import com.wmdd.errandz.bean.Address;
 import com.wmdd.errandz.bean.CommonResponse;
 import com.wmdd.errandz.bean.Response;
 import com.wmdd.errandz.data.Prefs;
@@ -23,11 +24,11 @@ public class UserProfileEditViewModel extends ViewModel {
         updateProfileResponse = new MutableLiveData<>();
     }
 
-    public void updateUserProfileApiCall(String firstName, String lastName, String bio) {
+    public void updateUserProfileApiCall(String firstName, String lastName, String bio, String addressJsonString) {
 
         int userID = Prefs.getInstance().getUserID();
 
-        errandzApi.uploadUserInfoRequest(userID, firstName, lastName, bio)
+        errandzApi.uploadUserInfoRequest(userID, firstName, lastName, bio, addressJsonString)
                 .enqueue(new Callback<CommonResponse>() {
                     @Override
                     public void onResponse(Call<CommonResponse> call, retrofit2.Response<CommonResponse> response) {
