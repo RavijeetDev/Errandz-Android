@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.os.Handler;
 
 import com.wmdd.errandz.R;
+import com.wmdd.errandz.address.AddressActivity;
+import com.wmdd.errandz.bean.Address;
 import com.wmdd.errandz.data.Prefs;
 import com.wmdd.errandz.hirerHome.HirerHomeActivity;
 import com.wmdd.errandz.login.LoginActivity;
@@ -38,12 +40,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void checkUserType() {
-        if(Prefs.getInstance().getUserType() == 1) {
-            Intent intent = new Intent(getApplicationContext(), HirerHomeActivity.class);
-            startActivity(intent);
+        String address = Prefs.getInstance().getFullAddress();
+        if (address.isEmpty()) {
+            Intent addressIntent = new Intent(this, AddressActivity.class);
+            startActivity(addressIntent);
         } else {
-            Intent intent = new Intent(getApplicationContext(), TaskerHomeActivity.class);
-            startActivity(intent);
+            if (Prefs.getInstance().getUserType() == 1) {
+                Intent intent = new Intent(getApplicationContext(), HirerHomeActivity.class);
+                startActivity(intent);
+            } else {
+                Intent intent = new Intent(getApplicationContext(), TaskerHomeActivity.class);
+                startActivity(intent);
+            }
         }
     }
 }
