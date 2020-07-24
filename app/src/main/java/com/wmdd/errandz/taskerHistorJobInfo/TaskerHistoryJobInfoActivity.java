@@ -3,6 +3,7 @@ package com.wmdd.errandz.taskerHistorJobInfo;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.os.Bundle;
@@ -15,6 +16,13 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.google.android.libraries.maps.CameraUpdateFactory;
+import com.google.android.libraries.maps.GoogleMap;
+import com.google.android.libraries.maps.OnMapReadyCallback;
+import com.google.android.libraries.maps.SupportMapFragment;
+import com.google.android.libraries.maps.model.CircleOptions;
+import com.google.android.libraries.maps.model.LatLng;
+import com.google.android.libraries.maps.model.MarkerOptions;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
@@ -28,7 +36,7 @@ import com.wmdd.errandz.util.Constants;
 
 import java.util.ArrayList;
 
-public class TaskerHistoryJobInfoActivity extends AppCompatActivity implements View.OnClickListener {
+public class TaskerHistoryJobInfoActivity extends AppCompatActivity implements View.OnClickListener, OnMapReadyCallback {
 
     private static final int HIRER_HISTORY_LIST = 1;
 
@@ -61,6 +69,7 @@ public class TaskerHistoryJobInfoActivity extends AppCompatActivity implements V
     private Menu menu;
     private MaterialToolbar toolbar;
 
+    private User user;
     private int jobID;
     private int hirerID;
     private int fromActivity;
@@ -128,6 +137,7 @@ public class TaskerHistoryJobInfoActivity extends AppCompatActivity implements V
 
         });
         taskerHistoryJonInfoViewModel.getUserMutableLiveData().observe(this, user -> {
+            this.user = user;
             setUserValues(user);
             taskerHistoryJonInfoViewModel.makeJobReviewApiCall(jobID);
 
@@ -186,6 +196,10 @@ public class TaskerHistoryJobInfoActivity extends AppCompatActivity implements V
 
         taskerNumberOfReviewsTextView.setText(user.getNumberOfReviews() == 0 || user.getNumberOfReviews() == 1
                 ? user.getNumberOfReviews() + " Review" : user.getNumberOfReviews() + " Reviews");
+
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
     }
 
     private void setJobValues(Job job) {
@@ -240,7 +254,7 @@ public class TaskerHistoryJobInfoActivity extends AppCompatActivity implements V
                 progressBarLayout.setVisibility(View.VISIBLE);
                 float rating = 4.0f;
                 String review = writeReviewTextInputLayout.getEditText().getText().toString();
-                taskerHistoryJonInfoViewModel.makeNewReviewCall(jobID,  hirerID, rating, review);
+                taskerHistoryJonInfoViewModel.makeNewReviewCall(jobID, hirerID, rating, review);
                 break;
             case R.id.edit_button:
                 writeReviewTextInputLayout.setVisibility(View.VISIBLE);
@@ -250,5 +264,23 @@ public class TaskerHistoryJobInfoActivity extends AppCompatActivity implements V
                 hirerReviewContainer.setVisibility(View.GONE);
                 break;
         }
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        googleMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+            @Override
+            public void onMapLoaded() {
+                LatLng position = new LatLng(Double.parseDouble(user.getAddress().getLatitude()), Double.parseDouble(user.getAddress().getLongitude()));
+                googleMap.moveCamera(CameraUpdateFactory.newLatLng(position));
+                googleMap.addCircle(new CircleOptions()
+                        .center(position)
+                        .radius(750)
+                        .strokeColor(ContextCompat.getColor(getApplicationContext(), R.color.map_stroke))
+                        .fillColor(ContextCompat.getColor(getApplicationContext(), R.color.map_fill)));
+                googleMap.setMinZoomPreference(13.0f);
+                googleMap.setMaxZoomPreference(13.0f);
+            }
+        });
     }
 }
