@@ -12,14 +12,17 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/api_key" />
+
         <activity android:name=".address.AddressActivity"></activity>
         <activity android:name=".jobRequestList.JobRequestListActivity" />
         <activity android:name=".jobRequestTaskerInfo.JobRequestUserInfoActivity" />
-        <activity android:name=".taskerJobHistory.TaskerJobHistoryListFragment" />
         <activity android:name=".hirerJobDescription.HirerJobDescriptionActivity" />
         <activity android:name=".SettingsActivity" />
         <activity android:name=".userInfoWithReviewList.UserInfoWithReviewListActivity" />
-        <activity android:name=".taskersJobs.TaskerJobsActivity" />
         <activity android:name=".taskerJobDescription.TaskerJobDescriptionActivity" />
         <activity android:name=".taskerHomeScreen.TaskerHomeActivity" />
         <activity android:name=".userProfileEdit.UserProfileEditActivity" />
