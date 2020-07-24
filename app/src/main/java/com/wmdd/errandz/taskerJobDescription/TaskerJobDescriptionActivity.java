@@ -3,9 +3,11 @@ package com.wmdd.errandz.taskerJobDescription;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.format.DateUtils;
@@ -23,6 +25,7 @@ import com.google.android.libraries.maps.CameraUpdateFactory;
 import com.google.android.libraries.maps.GoogleMap;
 import com.google.android.libraries.maps.OnMapReadyCallback;
 import com.google.android.libraries.maps.SupportMapFragment;
+import com.google.android.libraries.maps.model.CircleOptions;
 import com.google.android.libraries.maps.model.LatLng;
 import com.google.android.libraries.maps.model.MarkerOptions;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -71,9 +74,7 @@ public class TaskerJobDescriptionActivity extends AppCompatActivity implements O
     private User user;
     private int jobID;
     private int hirerID;
-    private GoogleMap myMap;
 
-    private LatLng CANADA = new LatLng(56.1304, -106.3468);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,10 +104,6 @@ public class TaskerJobDescriptionActivity extends AppCompatActivity implements O
         startJobButton = findViewById(R.id.start_job_button);
         progressBarLayout = findViewById(R.id.progress_bar_view);
         buttonBackgroundBehindContainer = findViewById(R.id.button_background_behind_container);
-
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
 
         jobID = getIntent().getIntExtra("JOB_ID", 0);
         hirerID = getIntent().getIntExtra("HIRER_ID", 0);
@@ -183,7 +180,7 @@ public class TaskerJobDescriptionActivity extends AppCompatActivity implements O
         getDirectionTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String latLongString = "geo:" + user.getAddress().getLatitude() + "," + user.getAddress().getLongitude();
+                String latLongString = "google.navigation:q=" + user.getAddress().getLatitude() + "," + user.getAddress().getLongitude();
                 Uri gmmIntentUri = Uri.parse(latLongString);
                 Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
                 mapIntent.setPackage("com.google.android.apps.maps");
@@ -254,8 +251,9 @@ public class TaskerJobDescriptionActivity extends AppCompatActivity implements O
         getDirectionTextView.setVisibility(View.VISIBLE);
         hirerMapViewContainer.setVisibility(View.VISIBLE);
 
-        setUpMap(Double.parseDouble(user.getAddress().getLatitude()),
-                Double.parseDouble(user.getAddress().getLongitude()));
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
 
     }
 
@@ -294,19 +292,21 @@ public class TaskerJobDescriptionActivity extends AppCompatActivity implements O
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        myMap = googleMap;
-        myMap.moveCamera(CameraUpdateFactory.newLatLng(CANADA));
-        myMap.setMinZoomPreference(2.0f);
-        myMap.setMaxZoomPreference(2.0f);
-    }
-
-    private void setUpMap(double latitude, double longitude) {
-        LatLng position = new LatLng(latitude, longitude);
-        myMap.moveCamera(CameraUpdateFactory.newLatLng(position));
-        myMap.addMarker(new MarkerOptions()
-                .position(position));
-        myMap.setMinZoomPreference(13.0f);
-        myMap.setMaxZoomPreference(13.0f);
-
+        googleMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+            @Override
+            public void onMapLoaded() {
+                LatLng position = new LatLng(Double.parseDouble(user.getAddress().getLatitude()), Double.parseDouble(user.getAddress().getLongitude()));
+                googleMap.moveCamera(CameraUpdateFactory.newLatLng(position));
+                googleMap.addMarker(new MarkerOptions()
+                        .position(position));
+//                googleMap.addCircle(new CircleOptions()
+//                        .center(position)
+//                        .radius(750)
+//                        .strokeColor(ContextCompat.getColor(getApplicationContext(), R.color.map_stroke))
+//                        .fillColor(ContextCompat.getColor(getApplicationContext(), R.color.map_fill)));
+                googleMap.setMinZoomPreference(13.0f);
+                googleMap.setMaxZoomPreference(13.0f);
+            }
+        });
     }
 }

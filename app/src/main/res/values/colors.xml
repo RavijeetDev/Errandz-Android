@@ -4,4 +4,6 @@
     <color name="colorPrimaryDark">#01714E</color>
     <color name="colorAccent">#1DBC78</color>
     <color name="yellow">#FCB204</color>
+    <color name="map_stroke">#7701714E</color>
+    <color name="map_fill">#3301714E</color>
 </resources>
