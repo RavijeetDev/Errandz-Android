@@ -56,23 +56,23 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:fillViewport="true"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/job_category_image_background"
-        android:visibility="visible">
+        app:layout_constraintTop_toBottomOf="@+id/job_category_image_background">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <TextView
-                android:visibility="gone"
                 android:id="@+id/job_status_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
                 android:textColor="@color/yellow"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -97,12 +97,12 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
+                android:gravity="end"
                 android:textColor="#707070"
                 android:textSize="17sp"
-                android:gravity="end"
-                app:layout_constraintStart_toEndOf="@+id/guideline3"
                 app:layout_constraintBaseline_toBaselineOf="@+id/job_name_label"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/guideline3"
                 tools:text="Jul 14, 2020" />
 
             <TextView
@@ -137,12 +137,84 @@
                 android:lineSpacingExtra="0.5dp"
                 android:textColor="#707070"
                 android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/job_date_label"
                 app:layout_constraintStart_toStartOf="@+id/job_name_label"
                 app:layout_constraintTop_toBottomOf="@+id/hirer_job_description_heading_label"
                 app:layout_constraintVertical_bias="0.0"
                 tools:text="" />
+
+            <TextView
+                android:id="@+id/assigned_to_heading_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Assigned To"
+                android:textColor="@android:color/black"
+                android:textSize="17sp"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="@+id/job_name_label"
+                app:layout_constraintTop_toBottomOf="@+id/job_description_text_view" />
+
+
+            <FrameLayout
+                android:id="@+id/user_profile_container"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginTop="18dp"
+                android:background="@drawable/profile_image_background"
+                android:padding="2dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toStartOf="@+id/hirer_name_text_view"
+                app:layout_constraintHorizontal_bias="0.19"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/assigned_to_heading_label">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:cardCornerRadius="5dp"
+                    app:cardElevation="0dp">
+
+                    <ImageView
+                        android:id="@+id/user_profile_image_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                </androidx.cardview.widget.CardView>
+
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/hirer_name_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="3dp"
+                android:textColor="@android:color/black"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:visibility="gone"
+                app:layout_constraintBottom_toTopOf="@+id/hirer_email_text_view"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/user_profile_container"
+                app:layout_constraintTop_toTopOf="@+id/user_profile_container"
+                app:layout_constraintVertical_bias="0.31"
+                app:layout_constraintVertical_chainStyle="packed"
+                tools:text="Elena Williams" />
+
+            <TextView
+                android:id="@+id/hirer_email_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:textColor="#707070"
+                android:textSize="16sp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/user_profile_container"
+                app:layout_constraintStart_toStartOf="@+id/hirer_name_text_view"
+                app:layout_constraintTop_toBottomOf="@+id/hirer_name_text_view"
+                tools:text="No Rating" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline3"

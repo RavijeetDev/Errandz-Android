@@ -1,7 +1,7 @@
 <resources>
-<string name="app_name">Errandz</string>
-<string name="api_key">AIzaSyBh4D2pzrsqeOUo2F8QMPEuJri6zOYyXB0</string>
-<string name="see_more"><u>See More</u></string>
-<string name="set_location_manually"><u>Set Location Manually</u></string>
-<string name="get_direction"><u>Get Direction</u></string>
+    <string name="app_name">Errandz</string>
+    <string name="api_key">AIzaSyBh4D2pzrsqeOUo2F8QMPEuJri6zOYyXB0</string>
+    <string name="see_more"><u>See More</u></string>
+    <string name="set_location_manually"><u>Set Location Manually</u></string>
+    <string name="get_direction"><u>Get Direction</u></string>
 </resources>

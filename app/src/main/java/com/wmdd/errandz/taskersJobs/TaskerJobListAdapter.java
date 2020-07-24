@@ -60,6 +60,10 @@ public class TaskerJobListAdapter extends RecyclerView.Adapter<TaskerJobListAdap
                 holder.jobStatusTextView.setText("Rejected");
                 holder.jobStatusTextView.setTextColor(Color.RED);
                 break;
+            case 5:
+                holder.jobStatusTextView.setText("Ongoing");
+                holder.jobStatusTextView.setTextColor(holder.itemView.getContext().getColor(R.color.yellow));
+                break;
         }
 
     }

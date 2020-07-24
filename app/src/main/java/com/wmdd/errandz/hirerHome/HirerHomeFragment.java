@@ -43,6 +43,7 @@ public class HirerHomeFragment extends Fragment implements View.OnClickListener,
 
     private  CardView upcomingJobCardView;
     private CardView jobHistoryCardView;
+    private TextView jobRequestLabel;
 
     private HirerHomeJobRequestListAdapter hirerHomeJobRequestListAdapter;
 
@@ -74,6 +75,8 @@ public class HirerHomeFragment extends Fragment implements View.OnClickListener,
         upcomingJobCardView = rootView.findViewById(R.id.upcoming_job_view_container);
         jobHistoryCardView = rootView.findViewById(R.id.job_history_view_container);
         jobRequestListRecyclerView = rootView.findViewById(R.id.worker_request_recycler_view);
+
+        jobRequestLabel = rootView.findViewById(R.id.job_request_label);
 
         jobRequestListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(),
                 RecyclerView.HORIZONTAL, false));
@@ -112,6 +115,8 @@ public class HirerHomeFragment extends Fragment implements View.OnClickListener,
 
         hirerHomeViewModel.getJobArrayList().observe(this, jobs -> {
             if(jobs.size() > 0) {
+                jobRequestLabel.setVisibility(View.VISIBLE);
+                seeMoreLink.setVisibility(View.VISIBLE);
                 jobRequestListRecyclerView.setVisibility(View.VISIBLE);
 
                 jobDescriptionArrayList = jobs;
