@@ -12,7 +12,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".jobRequestList.JobRequestListActivity"></activity>
+        <activity android:name=".address.AddressActivity"></activity>
+        <activity android:name=".jobRequestList.JobRequestListActivity" />
         <activity android:name=".jobRequestTaskerInfo.JobRequestUserInfoActivity" />
         <activity android:name=".taskerJobHistory.TaskerJobHistoryListFragment" />
         <activity android:name=".hirerJobDescription.HirerJobDescriptionActivity" />

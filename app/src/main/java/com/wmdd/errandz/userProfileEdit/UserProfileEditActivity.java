@@ -110,12 +110,14 @@ public class UserProfileEditActivity extends AppCompatActivity implements View.O
         lastNameTextInputLayout.getEditText().setText(user.getLastName());
         emailTextInputLayout.getEditText().setText(user.getEmailID());
         dobTextInputLayout.getEditText().setText(user.getDateOfBirth());
-        addressTextInputLayout.getEditText().setText(user.getAddress().getFullAddress());
         bioTextInputLayout.getEditText().setText(user.getBio());
 
         Picasso.get()
                 .load(user.getProfileImage())
                 .into(profileImageView);
+
+        address = user.getAddress();
+        addressTextInputLayout.getEditText().setText(user.getAddress().getFullAddress());
     }
 
     private void initializeViewModel() {
