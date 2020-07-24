@@ -72,6 +72,10 @@ public class Prefs {
         return sharedPreferences.getString("full_address", "");
     }
 
+    public void clear() {
+        sharedPreferences.edit().clear().commit();
+    }
+
 //    public void saveDateOfBirth(String dateOfBirth) {
 //        sharedPreferences.edit().putString("dob", dateOfBirth).apply();
 //    }

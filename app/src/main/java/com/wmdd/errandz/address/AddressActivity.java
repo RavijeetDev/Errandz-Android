@@ -30,6 +30,9 @@ import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 import com.wmdd.errandz.R;
+import com.wmdd.errandz.data.Prefs;
+import com.wmdd.errandz.hirerHome.HirerHomeActivity;
+import com.wmdd.errandz.taskerHomeScreen.TaskerHomeActivity;
 import com.wmdd.errandz.userProfileEdit.UserProfileEditActivity;
 import com.wmdd.errandz.userProfileEdit.UserProfileEditViewModel;
 
@@ -79,15 +82,24 @@ public class AddressActivity extends AppCompatActivity implements OnMapReadyCall
 
     private void initializeViewModel() {
         addressViewModel = ViewModelProviders.of(this).get(AddressViewModel.class);
+        addressViewModel.init();
+        addressViewModel.getResponse().observe(this, response -> {
 
-//        addressViewModel.getResponse().observe(this, response -> {
-//
-////            progressBarLayout.setVisibility(View.GONE);
-//
-//            if (response.getStatus().equals("success")) {
-//                finish();
-//            }
-//        });
+//            progressBarLayout.setVisibility(View.GONE);
+
+            if (response.getStatus().equals("success")) {
+                Prefs.getInstance().saveFullAddress(address.getFullAddress());
+
+                if(Prefs.getInstance().getUserType() == 1){
+                    Intent intent = new Intent(AddressActivity.this, HirerHomeActivity.class);
+                    startActivity(intent);
+                } else {
+                    Intent intent = new Intent(AddressActivity.this, TaskerHomeActivity.class);
+                    startActivity(intent);
+                }
+                finish();
+            }
+        });
     }
 
     @Override
@@ -98,6 +110,7 @@ public class AddressActivity extends AppCompatActivity implements OnMapReadyCall
                 onSetAddressCalled();
                 break;
             case R.id.select_address:
+                addressViewModel.callUserAddressApi(address);
                 break;
         }
     }
@@ -196,9 +209,6 @@ public class AddressActivity extends AppCompatActivity implements OnMapReadyCall
 
     private void setAddressValue() {
         addressTextInputLayout.getEditText().setText(address.getFullAddress());
-
-        String addressString = new Gson().toJson(address);
-        addressViewModel.callUserAddressApi(addressString);
     }
 
 

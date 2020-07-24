@@ -145,6 +145,7 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
                 sharedPreferences.saveUserID(0);
                 sharedPreferences.saveEmailID("");
                 sharedPreferences.saveUserType(0);
+                sharedPreferences.saveFullAddress("");
 
                 Intent loginIntent = new Intent(getContext(), LoginActivity.class);
                 startActivity(loginIntent);

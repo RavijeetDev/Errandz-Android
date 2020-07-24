@@ -25,7 +25,6 @@ public class JobRequestListViewModel extends ViewModel {
     public void init() {
         errandzApi = Api.getRetrofitClient().create(ErrandzApi.class);
         jobArrayList = new MutableLiveData<>();
-        makeHirerHomeDataApiCall();
     }
 
 

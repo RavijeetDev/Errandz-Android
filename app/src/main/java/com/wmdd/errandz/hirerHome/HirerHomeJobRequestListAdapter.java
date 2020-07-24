@@ -31,7 +31,7 @@ public class HirerHomeJobRequestListAdapter extends RecyclerView.Adapter<HirerHo
     }
 
     public interface JobItemClickListener {
-        void onJobItemClicked(User user);
+        void onJobItemClicked(int position);
     }
 
     @NonNull
@@ -91,17 +91,19 @@ public class HirerHomeJobRequestListAdapter extends RecyclerView.Adapter<HirerHo
 
             if(jobDescription.getUser().getTotalRating() > 0) {
                 taskerRatingBar.setVisibility(View.VISIBLE);
+                taskerRatingTextView.setVisibility(View.GONE);
                 taskerRatingBar.setRating(jobDescription.getUser().getTotalRating() /
                         jobDescription.getUser().getNumberOfReviews());
             } else {
                 taskerRatingTextView.setVisibility(View.VISIBLE);
+                taskerRatingBar.setVisibility(View.GONE);
             }
         }
 
         @Override
         public void onClick(View v) {
             JobDescription jobDescription = jobDescriptionArrayList.get(getAdapterPosition());
-            jobItemCLickListener.onJobItemClicked(jobDescription.getUser());
+            jobItemCLickListener.onJobItemClicked(getAdapterPosition());
         }
     }
 

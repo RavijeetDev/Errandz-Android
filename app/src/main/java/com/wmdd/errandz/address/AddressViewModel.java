@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.wmdd.errandz.api.Api;
 import com.wmdd.errandz.api.ErrandzApi;
+import com.wmdd.errandz.bean.Address;
 import com.wmdd.errandz.bean.CommonResponse;
 import com.wmdd.errandz.bean.Response;
 import com.wmdd.errandz.data.Prefs;
@@ -15,34 +16,36 @@ import retrofit2.Callback;
 public class AddressViewModel extends ViewModel {
 
     private ErrandzApi errandzApi;
-    private MutableLiveData<Response> updateProfileResponse;
+    private MutableLiveData<Response> addAddressLiveData;
 
     public void init() {
         errandzApi = Api.getRetrofitClient().create(ErrandzApi.class);
-        updateProfileResponse = new MutableLiveData<>();
+        addAddressLiveData = new MutableLiveData<>();
     }
 
-    public void callUserAddressApi(String address) {
+    public void callUserAddressApi(Address address) {
 
         int userID = Prefs.getInstance().getUserID();
 
-//        errandzApi.uploadUserInfoRequest(userID, firstName, lastName, bio, addressJsonString)
-//                .enqueue(new Callback<CommonResponse>() {
-//                    @Override
-//                    public void onResponse(Call<CommonResponse> call, retrofit2.Response<CommonResponse> response) {
-//                        if (response.isSuccessful()) {
-//                            updateProfileResponse.setValue(response.body().getResponse());
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFailure(Call<CommonResponse> call, Throwable t) {
-//
-//                    }
-//                });
+        errandzApi.updateAddressRequest(userID, address.getStreetAddress(), address.getCity(),
+                address.getProvince(), address.getPostalCode(), address.getCountry(), address.getFullAddress(),
+                address.getLatitude(), address.getLongitude())
+                .enqueue(new Callback<CommonResponse>() {
+                    @Override
+                    public void onResponse(Call<CommonResponse> call, retrofit2.Response<CommonResponse> response) {
+                        if (response.isSuccessful()) {
+                            addAddressLiveData.setValue(response.body().getResponse());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<CommonResponse> call, Throwable t) {
+
+                    }
+                });
     }
 
     public MutableLiveData<Response> getResponse() {
-        return updateProfileResponse;
+        return addAddressLiveData;
     }
 }

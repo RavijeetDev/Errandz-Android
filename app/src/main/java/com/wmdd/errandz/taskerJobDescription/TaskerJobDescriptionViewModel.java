@@ -41,8 +41,8 @@ public class TaskerJobDescriptionViewModel extends ViewModel {
             @Override
             public void onResponse(Call<JobInfoResponse> call, Response<JobInfoResponse> response) {
                 if (response.isSuccessful()) {
-                    jobMutableLiveData.setValue(response.body().getJobDescription().getJob());
                     userMutableLiveData.setValue(response.body().getJobDescription().getUser());
+                    jobMutableLiveData.setValue(response.body().getJobDescription().getJob());
                 }
             }
 

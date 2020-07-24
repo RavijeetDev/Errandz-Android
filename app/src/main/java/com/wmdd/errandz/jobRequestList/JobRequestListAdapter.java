@@ -31,7 +31,7 @@ public class JobRequestListAdapter extends RecyclerView.Adapter<JobRequestListAd
     }
 
     public interface JobItemClickListener {
-        void onJobItemClicked(User user);
+        void onJobItemClicked(int position);
     }
 
     @NonNull
@@ -107,7 +107,7 @@ public class JobRequestListAdapter extends RecyclerView.Adapter<JobRequestListAd
         @Override
         public void onClick(View v) {
             JobDescription jobDescription = jobDescriptionArrayList.get(getAdapterPosition());
-            jobItemCLickListener.onJobItemClicked(jobDescription.getUser());
+            jobItemCLickListener.onJobItemClicked(getAdapterPosition());
         }
     }
 

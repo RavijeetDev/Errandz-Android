@@ -184,4 +184,17 @@ public interface ErrandzApi {
     @POST("jobRequestList")
     Call<JobRequestListResponse> jobRequestListRequest(
             @Field("hirerID") int userID);
+
+    @FormUrlEncoded
+    @POST("addAddress")
+    Call<CommonResponse> updateAddressRequest(
+            @Field("userID") int userID,
+            @Field("streetAddress") String streetAddress,
+            @Field("city") String city,
+            @Field("province")String province,
+            @Field("postalCode") String postalCode,
+            @Field("country") String country,
+            @Field("fullAddress") String fullAddress,
+            @Field("latitude") String latitude,
+            @Field("longitude") String longitude);
 }

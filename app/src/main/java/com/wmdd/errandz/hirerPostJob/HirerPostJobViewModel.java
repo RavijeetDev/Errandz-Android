@@ -42,6 +42,7 @@ public class HirerPostJobViewModel extends ViewModel {
         try {
             datePickerBuilder.setCalendarConstraints(constraintsBuilder.build());
             MaterialDatePicker<?> picker = datePickerBuilder.build();
+
             picker.show(fragmentManager, picker.toString());
             addPickerListeners(picker);
         } catch (IllegalArgumentException e) {
