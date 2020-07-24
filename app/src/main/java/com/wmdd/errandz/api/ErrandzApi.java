@@ -7,6 +7,7 @@ import com.wmdd.errandz.bean.JobInfoResponse;
 import com.wmdd.errandz.bean.JobListResponse;
 import com.wmdd.errandz.bean.HirerUpcomingJobListResponse;
 import com.wmdd.errandz.bean.CommonResponse;
+import com.wmdd.errandz.bean.JobRequestListResponse;
 import com.wmdd.errandz.bean.LoginResponse;
 import com.wmdd.errandz.bean.UserInfoResponse;
 import com.wmdd.errandz.bean.TaskerHomeDataResponse;
@@ -156,4 +157,31 @@ public interface ErrandzApi {
     @POST("userReviewList")
     Call<UserReviewResponse> userReviewListRequest(
             @Field("userID") int userID);
+
+    @FormUrlEncoded
+    @POST("historyJobInfo")
+    Call<JobInfoResponse> hirerJobInfoHistoryRequest(
+            @Field("jobID") int jobID,
+            @Field("hirerID") int userID,
+            @Field("taskerID") int taskerID);
+
+    @FormUrlEncoded
+    @POST("reviewsOfJob")
+    Call<UserReviewResponse> jobReviewListCall(
+            @Field("jobID") int jobID,
+            @Field("reviewerID") int userID);
+
+    @FormUrlEncoded
+    @POST("postReview")
+    Call<CommonResponse> addNewReviewRequest(
+            @Field("jobID") int jobID,
+            @Field("userID") int userID,
+            @Field("reviewerID") int taskerID,
+            @Field("rating") float rating,
+            @Field("review") String review);
+
+    @FormUrlEncoded
+    @POST("jobRequestList")
+    Call<JobRequestListResponse> jobRequestListRequest(
+            @Field("hirerID") int userID);
 }

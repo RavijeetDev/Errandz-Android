@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.wmdd.errandz.R;
+import com.wmdd.errandz.taskerJobHistory.TaskerJobHistoryListFragment;
 import com.wmdd.errandz.taskersJobs.TaskerJobsActivity;
 import com.wmdd.errandz.userProfile.UserProfileFragment;
 
@@ -47,6 +48,8 @@ public class TaskerHomeActivity extends AppCompatActivity {
                         return true;
                     case R.id.job_history_menu:
                         homeToolbar.setTitle("My History");
+                        getSupportFragmentManager().beginTransaction().replace(R.id.container,
+                                new TaskerJobHistoryListFragment()).commitAllowingStateLoss();
                         return true;
                     case R.id.profile_menu:
                         homeToolbar.setTitle("User Profile");

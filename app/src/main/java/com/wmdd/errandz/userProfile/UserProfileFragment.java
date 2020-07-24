@@ -22,8 +22,12 @@ import com.bumptech.glide.Glide;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.squareup.picasso.Picasso;
 import com.wmdd.errandz.R;
+import com.wmdd.errandz.SettingsActivity;
 import com.wmdd.errandz.bean.User;
+import com.wmdd.errandz.data.Prefs;
 import com.wmdd.errandz.hirerHome.HirerHomeActivity;
+import com.wmdd.errandz.login.LoginActivity;
+import com.wmdd.errandz.userInfoWithReviewList.UserInfoWithReviewListActivity;
 import com.wmdd.errandz.userProfileEdit.UserProfileEditActivity;
 import com.wmdd.errandz.taskerHomeScreen.TaskerHomeActivity;
 
@@ -104,10 +108,12 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
             userFullNameTextView.setText(userInfo.getFirstName() + " " + userInfo.getLastName());
             userEmailTextView.setText(userInfo.getEmailID());
 
-            if (userInfo.getTotalRating() == 0) {
-                userRatingTextView.setText("No Rating");
+            if (userInfo.getTotalRating() > 0) {
+                userRatingTextView.setText(String.format("%.1f", userInfo.getTotalRating()));
+                userRatingBar.setRating(userInfo.getTotalRating());
+                userRatingBar.setVisibility(View.VISIBLE);
             } else {
-
+                userRatingTextView.setText("No Rating");
             }
             user = userInfo;
             if (userInfo.getBio().isEmpty()) {
@@ -131,6 +137,29 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
 
     @Override
     public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.logout_button:
 
+                Prefs sharedPreferences = Prefs.getInstance();
+
+                sharedPreferences.saveUserID(0);
+                sharedPreferences.saveEmailID("");
+                sharedPreferences.saveUserType(0);
+
+                Intent loginIntent = new Intent(getContext(), LoginActivity.class);
+                startActivity(loginIntent);
+                getActivity().finish();
+
+                break;
+            case R.id.review_button:
+                Intent reviewIntent = new Intent(getContext(), UserInfoWithReviewListActivity.class);
+                reviewIntent.putExtra("FROM_ACTIVITY", "user profile");
+                reviewIntent.putExtra("USER", user);
+                startActivity(reviewIntent);
+                break;
+            case R.id.settings_button:
+                Intent settingsIntent = new Intent(getContext(), SettingsActivity.class);
+                startActivity(settingsIntent);
+        }
     }
 }

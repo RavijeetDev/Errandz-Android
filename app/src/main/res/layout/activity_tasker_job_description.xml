@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
 
-    tools:context=".hirerJobDescription.HirerJobDescriptionActivity">
+    tools:context=".hirerPastJobDescription.HirerPastJobDescriptionActivity">
 
     <FrameLayout
         android:id="@+id/job_category_image_background"

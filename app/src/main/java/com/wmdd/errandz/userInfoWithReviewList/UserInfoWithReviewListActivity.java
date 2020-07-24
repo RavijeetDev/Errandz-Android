@@ -28,6 +28,7 @@ public class UserInfoWithReviewListActivity extends AppCompatActivity {
     private TextView userRatingTextView;
     private RatingBar userRatingBar;
     private TextView bioTextView;
+    private TextView bioLabel;
     private RecyclerView reviewsRecycleView;
     private TextView noReviewsTextView;
     private FrameLayout progressBarLayout;
@@ -36,6 +37,7 @@ public class UserInfoWithReviewListActivity extends AppCompatActivity {
     private ReviewListAdapter reviewListAdapter;
 
     private User user;
+    private String fromActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +51,7 @@ public class UserInfoWithReviewListActivity extends AppCompatActivity {
         userRatingTextView = findViewById(R.id.user_rating_text_view);
         userRatingBar = findViewById(R.id.user_rating_bar);
         bioTextView = findViewById(R.id.bio_text_view);
+        bioLabel = findViewById(R.id.label_bio);
         reviewsRecycleView = findViewById(R.id.review_recycler_view);
         noReviewsTextView = findViewById(R.id.no_review_text_view);
         progressBarLayout = findViewById(R.id.progress_bar_view);
@@ -57,7 +60,7 @@ public class UserInfoWithReviewListActivity extends AppCompatActivity {
         reviewListAdapter = new ReviewListAdapter();
         reviewsRecycleView.setAdapter(reviewListAdapter);
 
-        setToolbarTitle();
+
         setUserInfo();
         initializeViewModel();
     }
@@ -65,14 +68,23 @@ public class UserInfoWithReviewListActivity extends AppCompatActivity {
     private void setUserInfo() {
 
         user = getIntent().getParcelableExtra("USER");
+        fromActivity = getIntent().getStringExtra("FROM_ACTIVITY");
+
+        setToolbarTitle();
 
         userNameTextView.setText(user.getFirstName() + " " + user.getLastName());
         userAgeTextView.setText("Age: " + user.getAge());
-        bioTextView.setText(user.getBio());
+
+        if(fromActivity.equals("job description")) {
+            bioTextView.setText(user.getBio());
+        } else {
+            bioLabel.setVisibility(View.GONE);
+            bioTextView.setVisibility(View.GONE);
+        }
 
         if (user.getTotalRating() > 0) {
             userRatingTextView.setText(String.format("%.1f", user.getTotalRating()));
-            userRatingBar.setRating(user.getTotalRating()/5);
+            userRatingBar.setRating(user.getTotalRating());
         } else {
             userRatingTextView.setText("No Rating");
             userRatingBar.setVisibility(View.GONE);
@@ -109,11 +121,14 @@ public class UserInfoWithReviewListActivity extends AppCompatActivity {
 
     private void setToolbarTitle() {
         int userType = Prefs.getInstance().getUserType();
-
-        if(userType == 1){
-            toolbar.setTitle("Tasker Profile");
+        if(fromActivity.equals("job description")) {
+            if (userType == 1) {
+                toolbar.setTitle("Tasker Profile");
+            } else {
+                toolbar.setTitle("Hirer Profile");
+            }
         } else {
-            toolbar.setTitle("Hirer Profile");
+            toolbar.setTitle("Reviews");
         }
     }
 }

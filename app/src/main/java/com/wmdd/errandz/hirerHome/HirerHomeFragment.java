@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,13 +14,18 @@ import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.wmdd.errandz.bean.User;
 import com.wmdd.errandz.hirerJobHistoryList.HirerJobHistoryListActivity;
 import com.wmdd.errandz.hirerPostJob.HirerPostJobActivity;
 import com.wmdd.errandz.R;
 import com.wmdd.errandz.hirerUpcomingJobList.HirerUpcomingJobListActivity;
+import com.wmdd.errandz.jobRequestList.JobRequestListActivity;
+import com.wmdd.errandz.jobRequestTaskerInfo.JobRequestUserInfoActivity;
 
-public class HirerHomeFragment extends Fragment implements View.OnClickListener {
+public class HirerHomeFragment extends Fragment implements View.OnClickListener, HirerHomeJobRequestListAdapter.JobItemClickListener {
 
     private HirerHomeViewModel hirerHomeViewModel;
 
@@ -29,11 +35,17 @@ public class HirerHomeFragment extends Fragment implements View.OnClickListener 
     private ConstraintLayout jobListContainer;
     private CardView addJobButtonContainer;
     private FrameLayout progressBarLayout;
+    private RecyclerView jobRequestListRecyclerView;
+    private TextView seeMoreLink;
 
     private  CardView upcomingJobCardView;
     private CardView jobHistoryCardView;
 
+    private HirerHomeJobRequestListAdapter hirerHomeJobRequestListAdapter;
+
     private Callback callback;
+
+
 
     public interface Callback {
         void onListFetched(boolean isThereAnyJobPosted);
@@ -51,16 +63,24 @@ public class HirerHomeFragment extends Fragment implements View.OnClickListener 
         postFirstJobLayoutContainer = rootView.findViewById(R.id.no_post_layout_container);
         addJobButtonContainer = rootView.findViewById(R.id.add_job_button_container);
         jobListContainer = rootView.findViewById(R.id.job_list_container);
+        seeMoreLink = rootView.findViewById(R.id.see_more_job_request_link);
         progressBarLayout = rootView.findViewById(R.id.progress_bar_view);
 
         upcomingJobCardView = rootView.findViewById(R.id.upcoming_job_view_container);
         jobHistoryCardView = rootView.findViewById(R.id.job_history_view_container);
+        jobRequestListRecyclerView = rootView.findViewById(R.id.worker_request_recycler_view);
+
+        jobRequestListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(),
+                RecyclerView.HORIZONTAL, false));
+        hirerHomeJobRequestListAdapter = new HirerHomeJobRequestListAdapter(this);
+        jobRequestListRecyclerView.setAdapter(hirerHomeJobRequestListAdapter);
 
         progressBarLayout.setVisibility(View.VISIBLE);
 
         addJobButtonContainer.setOnClickListener(this);
         upcomingJobCardView.setOnClickListener(this);
         jobHistoryCardView.setOnClickListener(this);
+        seeMoreLink.setOnClickListener(this);
 
         initializeViewModel();
 
@@ -71,11 +91,11 @@ public class HirerHomeFragment extends Fragment implements View.OnClickListener 
         hirerHomeViewModel = ViewModelProviders.of(this).get(HirerHomeViewModel.class);
         hirerHomeViewModel.init();
 
-        hirerHomeViewModel.getHomeData().observe(this, homeData -> {
+        hirerHomeViewModel.getNumberOfJobs().observe(this, numberOfJobs -> {
 
             progressBarLayout.setVisibility(View.GONE);
 
-            if(homeData.getNumberOfJobs() == 0) {
+            if(numberOfJobs == 0) {
                 postFirstJobLayoutContainer.setVisibility(View.VISIBLE);
                 callback.onListFetched(false);
             } else {
@@ -83,6 +103,13 @@ public class HirerHomeFragment extends Fragment implements View.OnClickListener 
                 callback.onListFetched(true);
             }
 
+        });
+
+        hirerHomeViewModel.getJobArrayList().observe(this, jobs -> {
+            if(jobs.size() > 0) {
+                jobRequestListRecyclerView.setVisibility(View.VISIBLE);
+                hirerHomeJobRequestListAdapter.setJobList(jobs);
+            }
         });
     }
 
@@ -104,7 +131,19 @@ public class HirerHomeFragment extends Fragment implements View.OnClickListener 
                 Intent jobHistoryIntent = new Intent(getContext(), HirerJobHistoryListActivity.class);
                 startActivity(jobHistoryIntent);
                 break;
+
+            case R.id.see_more_job_request_link:
+                Intent jobRequestListIntent = new Intent(getContext(), JobRequestListActivity.class);
+                startActivity(jobRequestListIntent);
+                break;
         }
+    }
+
+    @Override
+    public void onJobItemClicked(User user) {
+        Intent intent = new Intent(getActivity(), JobRequestUserInfoActivity.class);
+        intent.putExtra("USER", user);
+        startActivity(intent);
     }
 
 

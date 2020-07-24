@@ -132,6 +132,7 @@ public class TaskerJobDescriptionActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(TaskerJobDescriptionActivity.this, UserInfoWithReviewListActivity.class);
+                intent.putExtra("FROM_ACTIVITY", "job description");
                 intent.putExtra("USER", user);
                 startActivity(intent);
             }
