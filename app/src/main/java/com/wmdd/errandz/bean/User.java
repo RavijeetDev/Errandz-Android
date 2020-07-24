@@ -36,6 +36,34 @@ public class User implements Parcelable {
 
     private float totalRating;
 
+    private Address address;
+
+    protected User(Parcel in) {
+        userID = in.readInt();
+        firstName = in.readString();
+        lastName = in.readString();
+        emailID = in.readString();
+        userType = in.readInt();
+        dateOfBirth = in.readLong();
+        profileImage = in.readString();
+        bio = in.readString();
+        numberOfReviews = in.readInt();
+        totalRating = in.readFloat();
+        address = in.readParcelable(Address.class.getClassLoader());
+    }
+
+    public static final Creator<User> CREATOR = new Creator<User>() {
+        @Override
+        public User createFromParcel(Parcel in) {
+            return new User(in);
+        }
+
+        @Override
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
+
     public int getUserID() {
         return userID;
     }
@@ -76,6 +104,10 @@ public class User implements Parcelable {
         return totalRating/numberOfReviews;
     }
 
+    public Address getAddress() {
+        return address;
+    }
+
     public String getDateOfBirth() {
         Date date = new Date();
         date.setTime(dateOfBirth);
@@ -113,31 +145,6 @@ public class User implements Parcelable {
         return age;
     }
 
-    protected User(Parcel in) {
-        userID = in.readInt();
-        firstName = in.readString();
-        lastName = in.readString();
-        emailID = in.readString();
-        userType = in.readInt();
-        dateOfBirth = in.readLong();
-        profileImage = in.readString();
-        bio = in.readString();
-        numberOfReviews = in.readInt();
-        totalRating = in.readFloat();
-    }
-
-    public static final Creator<User> CREATOR = new Creator<User>() {
-        @Override
-        public User createFromParcel(Parcel in) {
-            return new User(in);
-        }
-
-        @Override
-        public User[] newArray(int size) {
-            return new User[size];
-        }
-    };
-
     @Override
     public int describeContents() {
         return 0;
@@ -155,5 +162,6 @@ public class User implements Parcelable {
         dest.writeString(bio);
         dest.writeInt(numberOfReviews);
         dest.writeFloat(totalRating);
+        dest.writeParcelable(address, flags);
     }
 }

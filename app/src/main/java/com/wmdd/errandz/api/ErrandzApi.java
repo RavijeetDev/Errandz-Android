@@ -1,6 +1,7 @@
 package com.wmdd.errandz.api;
 
 
+import com.wmdd.errandz.bean.Address;
 import com.wmdd.errandz.bean.HirerHomeResponse;
 import com.wmdd.errandz.bean.JobInfoResponse;
 import com.wmdd.errandz.bean.JobListResponse;
@@ -108,8 +109,9 @@ public interface ErrandzApi {
             @Field("userID") int userID,
             @Field("firstName") String firstName,
             @Field("lastName") String lastName,
-            @Field("bio") String bio
-    );
+            @Field("bio") String bio,
+            @Field("address") String addressJson
+            );
 
     @FormUrlEncoded
     @POST("taskerHomeData")
