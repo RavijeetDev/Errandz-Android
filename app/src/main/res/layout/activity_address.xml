@@ -50,6 +50,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:clickable="true"
+        android:focusable="false"
         android:hint="Set Address"
         app:helperText="Add address of your location."
         app:layout_constraintStart_toStartOf="@+id/map_card_container"
@@ -59,7 +60,9 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/set_address_text_input_edit_text"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="false"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 

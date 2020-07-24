@@ -14,10 +14,12 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.Status;
+import com.google.android.libraries.maps.CameraUpdateFactory;
 import com.google.android.libraries.maps.GoogleMap;
 import com.google.android.libraries.maps.OnMapReadyCallback;
 import com.google.android.libraries.maps.SupportMapFragment;
 import com.google.android.libraries.maps.model.LatLng;
+import com.google.android.libraries.maps.model.LatLngBounds;
 import com.google.android.libraries.maps.model.MarkerOptions;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
@@ -46,12 +48,17 @@ public class AddressActivity extends AppCompatActivity implements OnMapReadyCall
 
     private AddressViewModel addressViewModel;
 
+    private GoogleMap myMap;
+    //    private LatLngBounds CANADA = new LatLngBounds(
+//            new LatLng(-44, 113), new LatLng(-10, 154));
+    private LatLng CANADA = new LatLng(56.1304, -106.3468);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_address);
 
-        addressTextInputLayout = findViewById(R.id.address_text_input_layout);
+        addressTextInputLayout = findViewById(R.id.set_address_text_input_layout);
         addAddressButton = findViewById(R.id.select_address);
 
 
@@ -66,26 +73,28 @@ public class AddressActivity extends AppCompatActivity implements OnMapReadyCall
 
     private void initializeAddressClickListener() {
         addressTextInputLayout.setOnClickListener(this);
+        addressTextInputLayout.getEditText().setOnClickListener(this);
         addAddressButton.setOnClickListener(this);
     }
 
     private void initializeViewModel() {
         addressViewModel = ViewModelProviders.of(this).get(AddressViewModel.class);
 
-        addressViewModel.getResponse().observe(this, response -> {
-
-//            progressBarLayout.setVisibility(View.GONE);
-
-            if (response.getStatus().equals("success")) {
-                finish();
-            }
-        });
+//        addressViewModel.getResponse().observe(this, response -> {
+//
+////            progressBarLayout.setVisibility(View.GONE);
+//
+//            if (response.getStatus().equals("success")) {
+//                finish();
+//            }
+//        });
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.address_text_input_layout:
+            case R.id.set_address_text_input_layout:
+            case R.id.set_address_text_input_edit_text:
                 onSetAddressCalled();
                 break;
             case R.id.select_address:
@@ -112,9 +121,23 @@ public class AddressActivity extends AppCompatActivity implements OnMapReadyCall
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        googleMap.addMarker(new MarkerOptions()
-                .position(new LatLng(49.1402515, -122.8369358))
-                .title("Marker"));
+//        googleMap.addMarker(new MarkerOptions()
+//                .position(new LatLng(49.1402515, -122.8369358))
+//                .title("Marker"));
+        myMap = googleMap;
+        myMap.moveCamera(CameraUpdateFactory.newLatLng(CANADA));
+        myMap.setMinZoomPreference(2.0f);
+        myMap.setMaxZoomPreference(2.0f);
+    }
+
+    private void setUpMap(double latitude, double longitude) {
+        LatLng position = new LatLng(latitude, longitude);
+        myMap.moveCamera(CameraUpdateFactory.newLatLng(position));
+        myMap.addMarker(new MarkerOptions()
+                .position(position));
+        myMap.setMinZoomPreference(13.0f);
+        myMap.setMaxZoomPreference(13.0f);
+
     }
 
 
@@ -151,6 +174,7 @@ public class AddressActivity extends AppCompatActivity implements OnMapReadyCall
                         address.setLongitude(String.valueOf(place.getLatLng().longitude));
 
                         setAddressValue();
+                        setUpMap(place.getLatLng().latitude, place.getLatLng().longitude);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
