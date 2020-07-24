@@ -33,6 +33,7 @@ import com.squareup.picasso.Picasso;
 import com.wmdd.errandz.R;
 import com.wmdd.errandz.bean.Job;
 import com.wmdd.errandz.bean.User;
+import com.wmdd.errandz.taskerHistorJobInfo.TaskerHistoryJobInfoActivity;
 import com.wmdd.errandz.taskerHomeScreen.TaskerHomeViewModel;
 import com.wmdd.errandz.userInfoWithReviewList.UserInfoWithReviewListActivity;
 import com.wmdd.errandz.util.Constants;
@@ -143,6 +144,25 @@ public class TaskerJobDescriptionActivity extends AppCompatActivity implements O
             }
         });
 
+        taskerJobDescriptionViewModel.getJobStartedMutableLiveData().observe(this, response -> {
+            progressBarLayout.setVisibility(View.GONE);
+            if (response.getStatus().equals("success")) {
+                jobStatusTextView.setText("Ongoing");
+                startJobButton.setText("Job Done");
+            }
+        });
+
+        taskerJobDescriptionViewModel.getJobCompletedMutableLiveData().observe(this, response -> {
+            progressBarLayout.setVisibility(View.GONE);
+            if (response.getStatus().equals("success")) {
+                Intent intent = new Intent(TaskerJobDescriptionActivity.this, TaskerHistoryJobInfoActivity.class);
+                intent.putExtra("HIRER_ID", job.getHirerID());
+                intent.putExtra("JOB_ID", job.getJobID());
+                startActivity(intent);
+                finish();
+            }
+        });
+
     }
 
     private void initializeClickListener() {
@@ -189,6 +209,18 @@ public class TaskerJobDescriptionActivity extends AppCompatActivity implements O
                 }
             }
         });
+
+        startJobButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                progressBarLayout.setVisibility(View.VISIBLE);
+                if(startJobButton.getText().toString().equals("Start Job")) {
+                    taskerJobDescriptionViewModel.setJobStatusStartedApiCall(user.getUserID(), job.getJobID(), job.getJobStatusID());
+                } else {
+                    taskerJobDescriptionViewModel.setCompleteStatusOFJob(user.getUserID(), job.getJobID(), job.getJobStatusID());
+                }
+            }
+        });
     }
 
     private void initializeJobInfoValues(Job job) {
@@ -219,6 +251,15 @@ public class TaskerJobDescriptionActivity extends AppCompatActivity implements O
                 jobStatusTextView.setText("Rejected");
             case 4:
                 saveButton.setText("Unsave");
+                break;
+            case 5:
+                jobStatusTextView.setText("Ongoing");
+                startJobButton.setText("Job Completed");
+                startJobButton.setVisibility(View.VISIBLE);
+                buttonBackgroundBehindContainer.setVisibility(View.VISIBLE);
+                showMap();
+                break;
+
         }
 
         if (job.getStatus() != 0 && job.getStatus() != 4) {
@@ -227,7 +268,7 @@ public class TaskerJobDescriptionActivity extends AppCompatActivity implements O
             jobStatusTextView.setVisibility(View.VISIBLE);
 
             applyButton.setVisibility(View.GONE);
-            if (job.getStatus() != 2) {
+            if (job.getStatus() != 2 && job.getStatus() != 5) {
                 buttonBackgroundBehindContainer.setVisibility(View.GONE);
             }
         }
@@ -245,6 +286,10 @@ public class TaskerJobDescriptionActivity extends AppCompatActivity implements O
             buttonBackgroundBehindContainer.setVisibility(View.GONE);
         }
 
+        showMap();
+    }
+
+    private void showMap() {
         hirerAddressHeadingLabel.setVisibility(View.VISIBLE);
         hirerAddressTextView.setVisibility(View.VISIBLE);
         hirerAddressTextView.setText(user.getAddress().getFullAddress());

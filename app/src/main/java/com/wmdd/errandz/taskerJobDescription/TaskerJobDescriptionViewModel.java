@@ -25,6 +25,8 @@ public class TaskerJobDescriptionViewModel extends ViewModel {
     private MutableLiveData<Job> jobMutableLiveData;
     private MutableLiveData<com.wmdd.errandz.bean.Response> responseMutableLiveData;
     private MutableLiveData<com.wmdd.errandz.bean.Response> savedMutableLiveData;
+    private MutableLiveData<com.wmdd.errandz.bean.Response> jobStartedMutableLiveData;
+    private MutableLiveData<com.wmdd.errandz.bean.Response> jobCompletedMutableLiveData;
 
     public void init() {
         errandzApi = Api.getRetrofitClient().create(ErrandzApi.class);
@@ -32,6 +34,8 @@ public class TaskerJobDescriptionViewModel extends ViewModel {
         userMutableLiveData = new MutableLiveData<>();
         responseMutableLiveData = new MutableLiveData<>();
         savedMutableLiveData = new MutableLiveData<>();
+        jobStartedMutableLiveData = new MutableLiveData<>();
+        jobCompletedMutableLiveData = new MutableLiveData<>();
     }
 
     public void makeJobInfoApiCall(int hirerId, int jobID) {
@@ -109,7 +113,38 @@ public class TaskerJobDescriptionViewModel extends ViewModel {
         });
     }
 
+    public void setJobStatusStartedApiCall(int hirerID, int jobID, int jobStatusID) {
 
+        errandzApi.updateJobStatus(Prefs.getInstance().getUserID(), hirerID, jobID, 5, jobStatusID).enqueue(new Callback<CommonResponse>() {
+            @Override
+            public void onResponse(Call<CommonResponse> call, Response<CommonResponse> response) {
+                if(response.isSuccessful()) {
+                    jobStartedMutableLiveData.setValue(response.body().getResponse());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CommonResponse> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public void setCompleteStatusOFJob(int hirerID, int jobID, int jobStatusID) {
+        errandzApi.updateJobStatus(Prefs.getInstance().getUserID(), hirerID, jobID, 6, jobStatusID).enqueue(new Callback<CommonResponse>() {
+            @Override
+            public void onResponse(Call<CommonResponse> call, Response<CommonResponse> response) {
+                if(response.isSuccessful()) {
+                    jobCompletedMutableLiveData.setValue(response.body().getResponse());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CommonResponse> call, Throwable t) {
+
+            }
+        });
+    }
 
     public MutableLiveData<User> getUserMutableLiveData() {
         return userMutableLiveData;
@@ -122,4 +157,10 @@ public class TaskerJobDescriptionViewModel extends ViewModel {
     public MutableLiveData<com.wmdd.errandz.bean.Response> getResponseMutableLiveData() { return responseMutableLiveData; }
 
     public MutableLiveData<com.wmdd.errandz.bean.Response> getSavedMutableLiveData() { return savedMutableLiveData; }
+
+    public MutableLiveData<com.wmdd.errandz.bean.Response> getJobStartedMutableLiveData() { return jobStartedMutableLiveData; }
+
+    public MutableLiveData<com.wmdd.errandz.bean.Response> getJobCompletedMutableLiveData() {
+        return jobCompletedMutableLiveData;
+    }
 }

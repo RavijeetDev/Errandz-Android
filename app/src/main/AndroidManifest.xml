@@ -12,12 +12,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".taskerHistorJobInfo.TaskerHistoryJobInfoActivity"></activity>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/api_key" />
 
-        <activity android:name=".address.AddressActivity"></activity>
+        <activity android:name=".address.AddressActivity" />
         <activity android:name=".jobRequestList.JobRequestListActivity" />
         <activity android:name=".jobRequestTaskerInfo.JobRequestUserInfoActivity" />
         <activity android:name=".hirerJobDescription.HirerJobDescriptionActivity" />
