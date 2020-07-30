@@ -65,7 +65,7 @@ public class TaskerJobHistoryListFragment extends Fragment implements TaskerJobH
     public void onJobItemClicked(int position) {
         Intent intent = new Intent(getActivity(), TaskerHistoryJobInfoActivity.class);
         intent.putExtra("JOB_ID", jobArrayList.get(position).getJobID());
-        intent.putExtra("HIRER_ID", jobArrayList.get(position).getTaskerID());
+        intent.putExtra("HIRER_ID", jobArrayList.get(position).getHirerID());
 //        intent.putExtra(Constants.FROM_ACTIVITY, HIRER_HISTORY_LIST);
         startActivity(intent);
     }

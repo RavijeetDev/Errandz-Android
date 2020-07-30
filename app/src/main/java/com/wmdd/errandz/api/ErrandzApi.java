@@ -23,15 +23,15 @@ public interface ErrandzApi {
 
     @FormUrlEncoded
     @POST("signUp")
-    Observable<CommonResponse> signUpApiRequest(
+    Call<CommonResponse> signUpApiRequest(
             @Field("firstName") String firstName,
             @Field("lastName") String lastName,
-            @Field("password") String password,
-            @Field("dob") String dateOfBirth,
+            @Field("dob") long dateOfBirth,
             @Field("emailID") String emailID,
             @Field("userType") int userType,
             @Field("loginType") int loginType,
-            @Field("googleID") String googleID
+            @Field("uid") String uid,
+            @Field("profileImage") String profileImage
     );
 
     @FormUrlEncoded
@@ -65,8 +65,16 @@ public interface ErrandzApi {
     @POST("login")
     Call<LoginResponse> loginRequest(
             @Field("emailID") String emailID,
+            @Field("uID") String uID,
             @Field("loginType") int loginType,
-            @Field("password") String password
+            @Field("token") String pushToken
+    );
+
+    @FormUrlEncoded
+    @POST("updateNotificationToken")
+    Call<CommonResponse> updatePushToken(
+            @Field("userID") int userID,
+            @Field("token") String token
     );
 
     @FormUrlEncoded

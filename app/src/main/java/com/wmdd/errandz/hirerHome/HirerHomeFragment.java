@@ -99,6 +99,7 @@ public class HirerHomeFragment extends Fragment implements View.OnClickListener,
         hirerHomeViewModel = ViewModelProviders.of(this).get(HirerHomeViewModel.class);
         hirerHomeViewModel.init();
 
+
         hirerHomeViewModel.getNumberOfJobs().observe(this, numberOfJobs -> {
 
             progressBarLayout.setVisibility(View.GONE);
@@ -165,6 +166,9 @@ public class HirerHomeFragment extends Fragment implements View.OnClickListener,
     public void onResume() {
         super.onResume();
         hirerHomeViewModel.makeHirerHomeDataApiCall();
+        jobRequestLabel.setVisibility(View.GONE);
+        seeMoreLink.setVisibility(View.GONE);
+        jobRequestListRecyclerView.setVisibility(View.GONE);
     }
 
 }

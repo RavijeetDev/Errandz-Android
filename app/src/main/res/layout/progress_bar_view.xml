@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:id="@+id/progress_bar_view"
     android:layout_width="match_parent"
@@ -20,7 +21,7 @@
         android:layout_height="wrap_content"
         android:indeterminate="true"
         android:layout_gravity="center"
-        android:indeterminateTint="@android:color/black" />
+        android:indeterminateTint="@color/colorPrimary" />
 
 
 </FrameLayout>
