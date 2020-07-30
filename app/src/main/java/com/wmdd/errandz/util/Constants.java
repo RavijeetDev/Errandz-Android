@@ -9,6 +9,9 @@ public interface Constants {
     // IP for Server Hosted on AWS EC2 Instance
 //    String LOCAL_BASE_URL = "http://54.167.159.136:3000/";
 
+    int HIRER = 1;
+    int TASKER = 2;
+
     String[] jobCategory = {
             "Carpentry", "Cleaning", "Home Repairs", "Mounting", "Moving", "Organizing",
             "Packing and Unpacking", "Paint", "Pet Sitting", "Yard Work"

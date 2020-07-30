@@ -32,7 +32,6 @@
         <activity android:name=".hirerPastJobDescription.HirerPastJobDescriptionActivity" />
         <activity android:name=".hirerPostJob.HirerPostJobActivity" />
         <activity android:name=".hirerHome.HirerHomeActivity" />
-        <activity android:name=".login.SignUpActivity" />
         <activity android:name=".login.LoginActivity" />
         <activity android:name=".splash.MainActivity">
             <intent-filter>
