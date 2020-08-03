@@ -44,8 +44,8 @@ public class Prefs {
         sharedPreferences.edit().putString("id_token", idToken).commit();
     }
 
-    public void getIDToken() {
-        sharedPreferences.getString("id_token", "");
+    public String getIDToken() {
+        return sharedPreferences.getString("id_token", "");
     }
     public void saveEmailID(String emailID) {
         sharedPreferences.edit().putString("emailID", emailID).apply();

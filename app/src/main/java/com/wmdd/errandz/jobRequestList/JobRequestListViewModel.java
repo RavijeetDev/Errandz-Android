@@ -19,20 +19,28 @@ import retrofit2.Response;
 
 public class JobRequestListViewModel extends ViewModel {
 
+    private Prefs sharedPreference;
     private ErrandzApi errandzApi;
+
     private MutableLiveData<ArrayList<JobDescription>> jobArrayList;
 
     public void init() {
+
+        sharedPreference = Prefs.getInstance();
         errandzApi = Api.getRetrofitClient().create(ErrandzApi.class);
+
         jobArrayList = new MutableLiveData<>();
     }
 
 
     public void makeHirerHomeDataApiCall() {
 
-        int userID = Prefs.getInstance().getUserID();
+        int userID = sharedPreference.getUserID();
+        String idToken = sharedPreference.getIDToken();
+        String uid = sharedPreference.getUID();
 
-        errandzApi.jobRequestListRequest(userID).enqueue(new Callback<JobRequestListResponse>() {
+
+        errandzApi.jobRequestListRequest(idToken, uid, userID).enqueue(new Callback<JobRequestListResponse>() {
             @Override
             public void onResponse(Call<JobRequestListResponse> call, Response<JobRequestListResponse> response) {
                 if(response.isSuccessful()) {

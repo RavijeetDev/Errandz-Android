@@ -2,15 +2,14 @@ package com.wmdd.errandz.address;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.Status;
@@ -19,7 +18,6 @@ import com.google.android.libraries.maps.GoogleMap;
 import com.google.android.libraries.maps.OnMapReadyCallback;
 import com.google.android.libraries.maps.SupportMapFragment;
 import com.google.android.libraries.maps.model.LatLng;
-import com.google.android.libraries.maps.model.LatLngBounds;
 import com.google.android.libraries.maps.model.MarkerOptions;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
@@ -27,43 +25,39 @@ import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
-import com.google.android.material.textfield.TextInputLayout;
-import com.google.gson.Gson;
 import com.wmdd.errandz.R;
+import com.wmdd.errandz.bean.User;
 import com.wmdd.errandz.data.Prefs;
+import com.wmdd.errandz.databinding.ActivityAddressBinding;
 import com.wmdd.errandz.hirerHome.HirerHomeActivity;
+import com.wmdd.errandz.login.LoginFragment;
 import com.wmdd.errandz.taskerHomeScreen.TaskerHomeActivity;
 import com.wmdd.errandz.userProfileEdit.UserProfileEditActivity;
-import com.wmdd.errandz.userProfileEdit.UserProfileEditViewModel;
 
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
+import static com.wmdd.errandz.util.Constants.FROM_ACTIVITY;
+
 public class AddressActivity extends AppCompatActivity implements OnMapReadyCallback, View.OnClickListener {
 
     private static final int AUTOCOMPLETE_REQUEST_CODE = 100;
+    private LatLng CANADA = new LatLng(56.1304, -106.3468);
+
+    private GoogleMap googleMap;
+
+    private User user;
     private com.wmdd.errandz.bean.Address address;
 
-    private TextInputLayout addressTextInputLayout;
-    private Button addAddressButton;
-
     private AddressViewModel addressViewModel;
-
-    private GoogleMap myMap;
-    //    private LatLngBounds CANADA = new LatLngBounds(
-//            new LatLng(-44, 113), new LatLng(-10, 154));
-    private LatLng CANADA = new LatLng(56.1304, -106.3468);
+    private ActivityAddressBinding addressBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_address);
-
-        addressTextInputLayout = findViewById(R.id.set_address_text_input_layout);
-        addAddressButton = findViewById(R.id.select_address);
-
+        addressBinding = DataBindingUtil.setContentView(this, R.layout.activity_address);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -75,9 +69,9 @@ public class AddressActivity extends AppCompatActivity implements OnMapReadyCall
     }
 
     private void initializeAddressClickListener() {
-        addressTextInputLayout.setOnClickListener(this);
-        addressTextInputLayout.getEditText().setOnClickListener(this);
-        addAddressButton.setOnClickListener(this);
+        addressBinding.setAddressTextInputLayout.setOnClickListener(this);
+        addressBinding.setAddressTextInputEditText.setOnClickListener(this);
+        addressBinding.selectAddress.setOnClickListener(this);
     }
 
     private void initializeViewModel() {
@@ -85,21 +79,48 @@ public class AddressActivity extends AppCompatActivity implements OnMapReadyCall
         addressViewModel.init();
         addressViewModel.getResponse().observe(this, response -> {
 
-//            progressBarLayout.setVisibility(View.GONE);
+            addressBinding.progressBarView.setVisibility(View.GONE);
 
             if (response.getStatus().equals("success")) {
-                Prefs.getInstance().saveFullAddress(address.getFullAddress());
 
-                if(Prefs.getInstance().getUserType() == 1){
-                    Intent intent = new Intent(AddressActivity.this, HirerHomeActivity.class);
-                    startActivity(intent);
-                } else {
-                    Intent intent = new Intent(AddressActivity.this, TaskerHomeActivity.class);
-                    startActivity(intent);
-                }
+                Prefs.getInstance().saveFullAddress(address.getFullAddress());
+//                if (Prefs.getInstance().getUserBio().isEmpty() || Prefs.getInstance().getProfileImage().isEmpty()) {
+//                    user = getIntent().getParcelableExtra("USER");
+//
+//                    if (user != null) {
+//                        addressViewModel.getUserInfo();
+//                    } else {
+//                        openUserEditProfile();
+//                    }
+//                } else {
+                    if (Prefs.getInstance().getUserType() == 1) {
+                        Intent intent = new Intent(AddressActivity.this, HirerHomeActivity.class);
+                        startActivity(intent);
+                    } else {
+                        Intent intent = new Intent(AddressActivity.this, TaskerHomeActivity.class);
+                        startActivity(intent);
+                    }
+//                }
                 finish();
             }
         });
+
+        addressViewModel.getUserMutableLiveData().observe(this, userInfo -> {
+            if (userInfo != null) {
+                addressBinding.progressBarView.setVisibility(View.GONE);
+                user = userInfo;
+                openUserEditProfile();
+            }
+        });
+    }
+
+    private void openUserEditProfile() {
+
+        Intent intent = new Intent(this, UserProfileEditActivity.class);
+        intent.putExtra(FROM_ACTIVITY, LoginFragment.class.getSimpleName());
+        intent.putExtra("USER", user);
+        startActivity(intent);
+
     }
 
     @Override
@@ -110,6 +131,7 @@ public class AddressActivity extends AppCompatActivity implements OnMapReadyCall
                 onSetAddressCalled();
                 break;
             case R.id.select_address:
+                addressBinding.progressBarView.setVisibility(View.VISIBLE);
                 addressViewModel.callUserAddressApi(address);
                 break;
         }
@@ -134,22 +156,19 @@ public class AddressActivity extends AppCompatActivity implements OnMapReadyCall
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-//        googleMap.addMarker(new MarkerOptions()
-//                .position(new LatLng(49.1402515, -122.8369358))
-//                .title("Marker"));
-        myMap = googleMap;
-        myMap.moveCamera(CameraUpdateFactory.newLatLng(CANADA));
-        myMap.setMinZoomPreference(2.0f);
-        myMap.setMaxZoomPreference(2.0f);
+        this.googleMap = googleMap;
+        this.googleMap.moveCamera(CameraUpdateFactory.newLatLng(CANADA));
+        this.googleMap.setMinZoomPreference(2.0f);
+        this.googleMap.setMaxZoomPreference(2.0f);
     }
 
     private void setUpMap(double latitude, double longitude) {
         LatLng position = new LatLng(latitude, longitude);
-        myMap.moveCamera(CameraUpdateFactory.newLatLng(position));
-        myMap.addMarker(new MarkerOptions()
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(position));
+        googleMap.addMarker(new MarkerOptions()
                 .position(position));
-        myMap.setMinZoomPreference(13.0f);
-        myMap.setMaxZoomPreference(13.0f);
+        googleMap.setMinZoomPreference(13.0f);
+        googleMap.setMaxZoomPreference(13.0f);
 
     }
 
@@ -161,8 +180,6 @@ public class AddressActivity extends AppCompatActivity implements OnMapReadyCall
             if (resultCode == RESULT_OK) {
                 Place place = Autocomplete.getPlaceFromIntent(data);
                 String fullAddress = place.getAddress();
-//                addressTextInputLayout.getEditText().setText(fullAddress);
-
                 try {
                     List<Address> addresses;
                     Geocoder geocoder = new Geocoder(this, Locale.getDefault());
@@ -193,7 +210,6 @@ public class AddressActivity extends AppCompatActivity implements OnMapReadyCall
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    //setMarker(latLng);
                 }
 
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
@@ -202,13 +218,13 @@ public class AddressActivity extends AppCompatActivity implements OnMapReadyCall
                 Toast.makeText(AddressActivity.this, "Error: " + status.getStatusMessage(), Toast.LENGTH_LONG).show();
 
             } else if (resultCode == RESULT_CANCELED) {
-                // The user canceled the operation.
+
             }
         }
     }
 
     private void setAddressValue() {
-        addressTextInputLayout.getEditText().setText(address.getFullAddress());
+        addressBinding.setAddressTextInputEditText.setText(address.getFullAddress());
     }
 
 

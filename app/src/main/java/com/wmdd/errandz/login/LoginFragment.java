@@ -29,6 +29,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 import com.wmdd.errandz.R;
 import com.wmdd.errandz.address.AddressActivity;
+import com.wmdd.errandz.bean.User;
 import com.wmdd.errandz.data.Prefs;
 import com.wmdd.errandz.databinding.FragmentLoginBinding;
 import com.wmdd.errandz.hirerHome.HirerHomeActivity;
@@ -41,7 +42,6 @@ import com.wmdd.errandz.util.Utility;
 public class LoginFragment extends Fragment implements View.OnClickListener {
 
     private final static int EMAIL_PASSWORD_LOGIN_TYPE = 1;
-    private final static int GOOGLE_LOGIN_TYPE = 2;
     private static final int RC_SIGN_IN = 1;
 
     private final static String FROM_ACTIVITY = "from_activity";
@@ -53,9 +53,9 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     private GoogleSignInClient googleSignInClient;
     private String firstName;
     private String lastName;
-    private String uid;
     private String profileImage;
     private String emailID;
+    private String idToken;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -113,13 +113,13 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         loginViewModel.getLoginResponse().observe(this, response -> {
 
             binding.progressBarView.setVisibility(View.GONE);
-            if(response.getStatus().equals("success")) {
+            if(response.getResponse().getStatus().equals("success")) {
+
+
                 Prefs sharedPreference = Prefs.getInstance();
 
                 if(sharedPreference.getFullAddress().isEmpty()) {
-                    openAddressActivity();
-                } else if(sharedPreference.getProfileImage().isEmpty() || sharedPreference.getUserBio().isEmpty()) {
-                    openUserEditProfile();
+                    openAddressActivity(response.getUser());
                 } else {
                     openHomeScreen();
                 }
@@ -127,7 +127,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                 getActivity().finish();
 
             } else {
-                showSnackbar(response.getMessage());
+                showSnackbar(response.getResponse().getMessage());
             }
 
         });
@@ -187,19 +187,21 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
         if (snackbar != null && snackbar.isShown()) snackbar.dismiss();
         snackbar = Snackbar.make(binding.passwordTextInputLayout, message,
-                Snackbar.LENGTH_INDEFINITE);
+                Snackbar.LENGTH_SHORT);
         Utility.initializeSnackBar(snackbar, getContext());
         snackbar.show();
     }
 
-    private void openAddressActivity() {
+    private void openAddressActivity(User user) {
         Intent intent = new Intent(getActivity(), AddressActivity.class);
+        intent.putExtra("USER", user);
         startActivity(intent);
     }
 
-    private void openUserEditProfile() {
+    private void openUserEditProfile(User user) {
         Intent intent = new Intent(getActivity(), UserProfileEditActivity.class);
         intent.putExtra(FROM_ACTIVITY, LoginFragment.class.getSimpleName());
+        intent.putExtra("USER", user);
         startActivity(intent);
     }
 
@@ -221,17 +223,18 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case RC_SIGN_IN:
-                    binding.progressBarView.setVisibility(View.GONE);
                     try {
                         Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
                         GoogleSignInAccount account = task.getResult(ApiException.class);
                         firstName = account.getGivenName();
                         lastName = account.getFamilyName();
-                        uid = account.getId();
+//                        uid = account.getId();
                         profileImage = account.getPhotoUrl().toString();
-                        emailID = account.getEmail().toString();
+                        emailID = account.getEmail();
+                        idToken = account.getIdToken();
 
-                        loginViewModel.loginWithGoogle(uid, emailID);
+
+                        loginViewModel.loginWithGoogle(emailID, idToken, ((AppCompatActivity)getActivity()));
                         Log.d("Google", account.toString());
 
                     } catch (ApiException e) {
@@ -275,7 +278,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
 
     public void onAddingMoreInfo(long dateOfBirthTimestamp, int userType) {
-        loginViewModel.makeGoogleLogin(firstName, lastName, emailID, dateOfBirthTimestamp, userType,
-                profileImage, uid);
+        binding.progressBarView.setVisibility(View.VISIBLE);
+        loginViewModel.makeGoogleLogin(firstName, lastName, dateOfBirthTimestamp, userType,
+                profileImage);
     }
 }

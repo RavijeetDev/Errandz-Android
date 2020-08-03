@@ -19,24 +19,35 @@ import retrofit2.Response;
 
 public class TaskerHomeViewModel extends ViewModel {
 
+    private Prefs sharedPreference;
     private ErrandzApi errandzApi;
+
     private MutableLiveData<ArrayList<Job>> approvedJobArrayList;
     private MutableLiveData<ArrayList<Job>> upcomingJobArrayList;
     private MutableLiveData<com.wmdd.errandz.bean.Response> savedResponse;
 
+    private String idToken;
+    private String uid;
+    private int userId;
+
     public void init() {
+
+        sharedPreference = Prefs.getInstance();
         errandzApi = Api.getRetrofitClient().create(ErrandzApi.class);
+
         approvedJobArrayList = new MutableLiveData<>();
         upcomingJobArrayList = new MutableLiveData<>();
         savedResponse = new MutableLiveData<>();
+
+        userId = sharedPreference.getUserID();
+        idToken = sharedPreference.getIDToken();
+        uid = sharedPreference.getUID();
 
     }
 
     public void makeClientHomeDataApiCall() {
 
-        int userId = Prefs.getInstance().getUserID();
-
-        errandzApi.taskerHomeDataRequest(userId).enqueue(new Callback<TaskerHomeDataResponse>() {
+        errandzApi.taskerHomeDataRequest(idToken, uid, userId).enqueue(new Callback<TaskerHomeDataResponse>() {
             @Override
             public void onResponse(Call<TaskerHomeDataResponse> call, Response<TaskerHomeDataResponse> response) {
                 if(response.isSuccessful()) {
@@ -55,9 +66,8 @@ public class TaskerHomeViewModel extends ViewModel {
 
     public void saveJob(Job job) {
 
-        int userId = Prefs.getInstance().getUserID();
-
-        errandzApi.updateJobStatus(userId, job.getHirerID(), job.getJobID(), 4, job.getJobStatusID()).enqueue(new Callback<CommonResponse>() {
+        errandzApi.updateJobStatus(idToken, uid, userId, job.getHirerID(), job.getJobID(), 4,
+                job.getJobStatusID()).enqueue(new Callback<CommonResponse>() {
             @Override
             public void onResponse(Call<CommonResponse> call, Response<CommonResponse> response) {
                 if(response.isSuccessful()) {
@@ -74,9 +84,7 @@ public class TaskerHomeViewModel extends ViewModel {
 
     public void unsaveJob(Job job) {
 
-        int userId = Prefs.getInstance().getUserID();
-
-        errandzApi.unsaveJob(job.getJobStatusID()).enqueue(new Callback<CommonResponse>() {
+        errandzApi.unsaveJob(idToken, uid, job.getJobStatusID()).enqueue(new Callback<CommonResponse>() {
             @Override
             public void onResponse(Call<CommonResponse> call, Response<CommonResponse> response) {
                 if(response.isSuccessful()) {

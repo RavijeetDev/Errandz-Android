@@ -17,21 +17,26 @@ import retrofit2.Response;
 
 public class HirerJobHistoryListViewModel extends ViewModel {
 
+    private Prefs sharedPreference;
     private ErrandzApi errandzApi;
 
     private MutableLiveData<ArrayList<Job>> jobArrayList;
 
     public void init() {
+        sharedPreference = Prefs.getInstance();
         errandzApi = Api.getRetrofitClient().create(ErrandzApi.class);
         jobArrayList = new MutableLiveData<>();
+
         makeUpcomingJobCall();
     }
 
     public void makeUpcomingJobCall() {
 
-        int userID = Prefs.getInstance().getUserID();
+        int userID = sharedPreference.getUserID();
+        String idToken = sharedPreference.getIDToken();
+        String uid = sharedPreference.getUID();
 
-        errandzApi.hirerJobHistoryListRequest(userID)
+        errandzApi.hirerJobHistoryListRequest(idToken, uid, userID)
                 .enqueue(new Callback<JobListResponse>() {
                     @Override
                     public void onResponse(Call<JobListResponse> call, Response<JobListResponse> response) {

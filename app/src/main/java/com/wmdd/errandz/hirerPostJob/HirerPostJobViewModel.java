@@ -22,14 +22,18 @@ import retrofit2.Callback;
 
 public class HirerPostJobViewModel extends ViewModel {
 
+    private Prefs sharedPreference;
     private ErrandzApi errandzApi;
 
     private MutableLiveData<String> jobDate;
     private MutableLiveData<Response> postJobResponse;
+
     private long timestamp;
 
     public void init() {
+        sharedPreference = Prefs.getInstance();
         errandzApi = Api.getRetrofitClient().create(ErrandzApi.class);
+
         jobDate = new MutableLiveData<>();
         postJobResponse = new MutableLiveData<>();
         postJobResponse = new MutableLiveData<>();
@@ -65,9 +69,11 @@ public class HirerPostJobViewModel extends ViewModel {
 
     public void makePostJobCall(String jobName, int jobCategory, String wage, String description) {
 
-        int userID = Prefs.getInstance().getUserID();
+        int userID = sharedPreference.getUserID();
+        String idToken = sharedPreference.getIDToken();
+        String uid = sharedPreference.getUID();
 
-        errandzApi.postJobRequest(userID, jobName, wage, timestamp, description, jobCategory)
+        errandzApi.postJobRequest(idToken, uid, userID, jobName, wage, timestamp, description, jobCategory)
                 .enqueue(new Callback<CommonResponse>() {
             @Override
             public void onResponse(Call<CommonResponse> call, retrofit2.Response<CommonResponse> response) {

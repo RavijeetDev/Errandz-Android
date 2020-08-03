@@ -142,8 +142,8 @@ public class JobRequestUserInfoAdapter extends RecyclerView.Adapter<RecyclerView
 
             if (user.getTotalRating() > 0) {
                 userRatingBar.setVisibility(View.VISIBLE);
-                userRatingTextView.setText(String.format("%.1f", user.getTotalRating()));
-                userRatingBar.setRating(user.getTotalRating());
+                userRatingTextView.setText(String.format("%.1f", user.getTotalRating()/user.getNumberOfReviews()));
+                userRatingBar.setRating((float) user.getTotalRating()/user.getNumberOfReviews());
             } else {
                 userRatingTextView.setText("No Rating");
             }

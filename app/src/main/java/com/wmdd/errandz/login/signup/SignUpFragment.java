@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -65,6 +66,9 @@ public class SignUpFragment extends Fragment implements View.OnClickListener{
         binding.hiringRadioButton.setOnClickListener(this);
         binding.jobSeekerRadioButton.setOnClickListener(this);
 
+        binding.birthDateTextInputLayout.setOnClickListener(this);
+        binding.birthDateEditText.setOnClickListener(this);
+
         addTextChangeListener(binding.firstNameTextInputLayout);
         addTextChangeListener(binding.lastNameTextInputLayout);
         addTextChangeListener(binding.emailTextInputLayout);
@@ -73,6 +77,13 @@ public class SignUpFragment extends Fragment implements View.OnClickListener{
         addTextChangeListener(binding.birthDateTextInputLayout);
 
         initializeViewModelResponses();
+
+        binding.signUpToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().onBackPressed();
+            }
+        });
 
         return binding.getRoot();
     }
@@ -83,6 +94,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener{
 
             binding.progressBarView.setVisibility(View.GONE);
             if(response.getStatus().equals("success")) {
+                showToast("Signed Up Successfully");
                 getActivity().onBackPressed();
             } else {
                 showSnackbar(response.getMessage());
@@ -96,6 +108,10 @@ public class SignUpFragment extends Fragment implements View.OnClickListener{
             showSnackbar(error);
         });
 
+    }
+
+    private void showToast(String message) {
+        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -217,7 +233,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener{
 
         if (snackbar != null && snackbar.isShown()) snackbar.dismiss();
         snackbar = Snackbar.make(binding.confirmPasswordTextInputLayout, message,
-                Snackbar.LENGTH_INDEFINITE);
+                Snackbar.LENGTH_SHORT);
         Utility.initializeSnackBar(snackbar, getContext());
         snackbar.show();
     }

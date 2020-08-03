@@ -188,7 +188,7 @@ public class TaskerHistoryJobInfoActivity extends AppCompatActivity implements V
 
         if (user.getTotalRating() > 0) {
             taskerRatingTextView.setText(String.format("%.1f", user.getTotalRating()));
-            taskerRatingBar.setRating(user.getTotalRating() / user.getNumberOfReviews());
+            taskerRatingBar.setRating((float) (user.getTotalRating() / user.getNumberOfReviews()));
         } else {
             taskerRatingTextView.setText("No Rating");
             taskerRatingBar.setVisibility(View.GONE);

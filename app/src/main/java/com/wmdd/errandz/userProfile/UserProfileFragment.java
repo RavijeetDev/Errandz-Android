@@ -110,7 +110,7 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
 
             if (userInfo.getTotalRating() > 0) {
                 userRatingTextView.setText(String.format("%.1f", userInfo.getTotalRating()));
-                userRatingBar.setRating(userInfo.getTotalRating());
+                userRatingBar.setRating((float) userInfo.getTotalRating());
                 userRatingBar.setVisibility(View.VISIBLE);
             } else {
                 userRatingTextView.setText("No Rating");

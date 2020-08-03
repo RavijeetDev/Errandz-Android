@@ -39,7 +39,14 @@ public class ErrandzFirebaseMessagingService extends FirebaseMessagingService {
 
     private void callPushTokenApi(String token) {
         ErrandzApi errandzApi = Api.getRetrofitClient().create(ErrandzApi.class);
-        errandzApi.updatePushToken(Prefs.getInstance().getUserID(), token).enqueue(new Callback<CommonResponse>() {
+
+        Prefs sharedPreference = Prefs.getInstance();
+
+        int userId = sharedPreference.getUserID();
+        String idToken = sharedPreference.getIDToken();
+        String uid = sharedPreference.getUID();
+
+        errandzApi.updatePushToken(idToken, uid, userId, token).enqueue(new Callback<CommonResponse>() {
             @Override
             public void onResponse(Call<CommonResponse> call,
                                    retrofit2.Response<CommonResponse> loginResponse) {

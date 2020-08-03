@@ -19,19 +19,31 @@ import retrofit2.Response;
 
 public class JobRequestUserInfoViewModel extends ViewModel {
 
+    private Prefs sharedPreference;
     private ErrandzApi errandzApi;
+
     private MutableLiveData<ArrayList<Review>> reviewArrayList;
     private MutableLiveData<com.wmdd.errandz.bean.Response> jobStatusResponse;
 
+    private String idToken;
+    private String uid;
+
     public void init() {
+
+        sharedPreference = Prefs.getInstance();
         errandzApi = Api.getRetrofitClient().create(ErrandzApi.class);
+
         reviewArrayList = new MutableLiveData<>();
         jobStatusResponse = new MutableLiveData<>();
+
+        idToken = sharedPreference.getIDToken();
+        uid = sharedPreference.getUID();
+
     }
 
     public void makeUserReviewApiCall(int taskerID) {
 
-        errandzApi.userReviewListRequest(taskerID).enqueue(new Callback<UserReviewResponse>() {
+        errandzApi.userReviewListRequest(idToken, uid, taskerID).enqueue(new Callback<UserReviewResponse>() {
             @Override
             public void onResponse(Call<UserReviewResponse> call, Response<UserReviewResponse> response) {
                 if (response.isSuccessful()) {
@@ -55,7 +67,8 @@ public class JobRequestUserInfoViewModel extends ViewModel {
 
     public void callUpdateJobStatusApi(int status, int jobStatusID, int jobID, int taskerID) {
 
-        errandzApi.updateJobStatus(taskerID, Prefs.getInstance().getUserID(), jobID, status, jobStatusID).enqueue(new Callback<CommonResponse>() {
+        errandzApi.updateJobStatus(idToken, uid, taskerID, Prefs.getInstance().getUserID(), jobID,
+                status, jobStatusID).enqueue(new Callback<CommonResponse>() {
             @Override
             public void onResponse(Call<CommonResponse> call, Response<CommonResponse> response) {
                 if (response.isSuccessful()) {

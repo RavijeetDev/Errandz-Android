@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_bottom_sheet_heading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/edit_profile_change_image_bottom_sheet_add_photo_label_margin_start"
+            android:layout_marginTop="@dimen/edit_profile_change_image_bottom_sheet_add_photo_label_margin_top"
+            android:gravity="center"
+            android:text="Add Photo"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/edit_profile_change_image_bottom_sheet_add_photo_label_text_size"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/camera_image_view"
+            android:layout_width="@dimen/edit_profile_change_image_bottom_sheet_take_picture_icon_size"
+            android:layout_height="@dimen/edit_profile_change_image_bottom_sheet_take_picture_icon_size"
+            android:layout_marginTop="@dimen/edit_profile_change_image_bottom_sheet_take_picture_margin_top"
+            app:layout_constraintStart_toStartOf="@+id/tv_bottom_sheet_heading"
+            app:layout_constraintTop_toBottomOf="@+id/tv_bottom_sheet_heading"
+            app:srcCompat="@drawable/ic_photo_camera" />
+
+        <TextView
+            android:id="@+id/take_picture"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/edit_profile_change_image_bottom_sheet_take_picture_margin_start"
+            android:text="@string/take_picture"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/edit_profile_change_image_bottom_sheet_take_picture_text_size"
+            app:layout_constraintBottom_toBottomOf="@+id/camera_image_view"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/camera_image_view"
+            app:layout_constraintTop_toTopOf="@+id/camera_image_view" />
+
+        <ImageView
+            android:id="@+id/galleryImageView"
+            android:layout_width="@dimen/edit_profile_change_image_bottom_sheet_take_picture_icon_size"
+            android:layout_height="@dimen/edit_profile_change_image_bottom_sheet_take_picture_icon_size"
+            android:layout_marginTop="@dimen/edit_profile_change_image_bottom_sheet_gallery_icon_margin_top"
+            android:layout_marginBottom="@dimen/edit_profile_change_image_bottom_sheet_gallery_icon_margin_bottom"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/camera_image_view"
+            app:layout_constraintTop_toBottomOf="@+id/camera_image_view"
+            app:srcCompat="@drawable/ic_gallery" />
+
+
+        <TextView
+            android:id="@+id/photo_gallery"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/edit_profile_change_image_bottom_sheet_take_picture_margin_start"
+            android:text="@string/gallery"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/edit_profile_change_image_bottom_sheet_take_picture_text_size"
+            app:layout_constraintBottom_toBottomOf="@+id/galleryImageView"
+            app:layout_constraintStart_toEndOf="@+id/galleryImageView"
+            app:layout_constraintTop_toTopOf="@+id/galleryImageView" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

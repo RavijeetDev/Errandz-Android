@@ -16,11 +16,22 @@
             android:layout_height="match_parent"
             android:background="#FBFBFB">
 
+            <ImageView
+                android:id="@+id/job_category_background_image_view"
+                android:layout_width="0dp"
+                android:layout_height="220dp"
+                android:background="#F2F2F2"
+                android:scaleType="centerCrop"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:srcCompat="@drawable/home_repairs_background" />
+
             <FrameLayout
                 android:id="@+id/job_category_image_background"
                 android:layout_width="0dp"
-                android:layout_height="200dp"
-                android:background="#F2F2F2"
+                android:layout_height="220dp"
+                android:background="#7E000000"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -29,6 +40,7 @@
                 android:id="@+id/job_category_image_view"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
+                android:tint="@android:color/white"
                 app:layout_constraintBottom_toBottomOf="@+id/job_category_image_background"
                 app:layout_constraintEnd_toEndOf="@+id/job_category_image_background"
                 app:layout_constraintStart_toStartOf="@+id/job_category_image_background"
@@ -53,7 +65,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="15dp"
                 android:layout_marginBottom="10dp"
-                android:textColor="@color/colorPrimaryDark"
+                android:textColor="@android:color/white"
                 android:textSize="22sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@+id/job_category_image_background"

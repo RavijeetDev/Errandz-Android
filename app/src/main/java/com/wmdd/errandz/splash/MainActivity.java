@@ -12,7 +12,12 @@ import com.wmdd.errandz.bean.Address;
 import com.wmdd.errandz.data.Prefs;
 import com.wmdd.errandz.hirerHome.HirerHomeActivity;
 import com.wmdd.errandz.login.LoginActivity;
+import com.wmdd.errandz.login.LoginFragment;
 import com.wmdd.errandz.taskerHomeScreen.TaskerHomeActivity;
+import com.wmdd.errandz.userProfileEdit.UserProfileEditActivity;
+import com.wmdd.errandz.userProfileEdit.UserProfileEditViewModel;
+
+import static com.wmdd.errandz.util.Constants.FROM_ACTIVITY;
 
 public class MainActivity extends AppCompatActivity {
 

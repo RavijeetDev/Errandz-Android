@@ -32,8 +32,10 @@
     <string name="invalid_age">Your age should be more than 14</string>
     <string name="sign_up_with_google">Sign In With Google</string>
     <string name="server_client_id">1010850856287-spvhvmsum2r42cvemel6iu28gv59iqk2.apps.googleusercontent.com</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="welcome_header">Welcome to Errandz!</string>
     <string name="app_slogan">Turning odd jobs into oppurtunities</string>
+
+    <string name="take_picture">Take Picture</string>
+    <string name="gallery">Gallery</string>
+    <string name="cant_load_image">Could not load images. Permission Denied!</string>
 </resources>
