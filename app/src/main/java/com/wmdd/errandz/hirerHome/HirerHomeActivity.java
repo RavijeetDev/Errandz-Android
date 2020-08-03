@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.widget.FrameLayout;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.transition.MaterialSharedAxis;
 import com.wmdd.errandz.R;
 import com.wmdd.errandz.hirerPostJob.HirerPostJobActivity;
 import com.wmdd.errandz.userProfile.UserProfileFragment;
@@ -30,6 +32,8 @@ public class HirerHomeActivity extends AppCompatActivity implements HirerHomeFra
 
     private BottomNavigationView bottomNavigationView;
 
+    private HirerHomeFragment hirerHomeFragment;
+    private UserProfileFragment userProfileFragment;
 
 
     @Override
@@ -41,9 +45,19 @@ public class HirerHomeActivity extends AppCompatActivity implements HirerHomeFra
         bottomNavigationView = findViewById(R.id.bottom_navigation_bar);
         postJobFloatingActionButton = findViewById(R.id.add_job_action_float_button);
 
+        createFragments();
+
         openHomeScreen();
 
         setViewClickListener();
+    }
+
+    private void createFragments() {
+        hirerHomeFragment = new HirerHomeFragment();
+        hirerHomeFragment.setEnterTransition(createTransition(false));
+        hirerHomeFragment.newInstance(this);
+        userProfileFragment = new UserProfileFragment();
+        userProfileFragment.setEnterTransition(createTransition(true));
     }
 
     private void setViewClickListener() {
@@ -60,8 +74,9 @@ public class HirerHomeActivity extends AppCompatActivity implements HirerHomeFra
                     case R.id.profile_menu:
                         homeToolbar.setTitle("User Profile");
                         homeToolbar.inflateMenu(R.menu.menu_home);
-                        getSupportFragmentManager().beginTransaction().replace(R.id.container,
-                                new UserProfileFragment()).commitAllowingStateLoss();
+                        getSupportFragmentManager().beginTransaction()
+                                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).replace(R.id.container,
+                                userProfileFragment).commitAllowingStateLoss();
                         return true;
                 }
                 return false;
@@ -78,8 +93,6 @@ public class HirerHomeActivity extends AppCompatActivity implements HirerHomeFra
     }
 
     private void openHomeScreen() {
-        HirerHomeFragment hirerHomeFragment = new HirerHomeFragment();
-        hirerHomeFragment.newInstance(this);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.container, hirerHomeFragment)
                 .commitAllowingStateLoss();
@@ -97,5 +110,16 @@ public class HirerHomeActivity extends AppCompatActivity implements HirerHomeFra
         }
     }
 
+
+    private MaterialSharedAxis createTransition(boolean entering) {
+        MaterialSharedAxis transition = new MaterialSharedAxis(MaterialSharedAxis.X, entering);
+        // Add targets for this transition to explicitly run transitions only on these views. Without
+        // targeting, a MaterialSharedAxis transition would be run for every view in the
+        // Fragment's layout.
+        transition.addTarget(R.id.root_client_home_screen);
+        transition.addTarget(R.id.root_user_profile_screen);
+
+        return transition;
+    }
 
 }

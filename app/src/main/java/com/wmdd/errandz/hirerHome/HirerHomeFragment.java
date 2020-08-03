@@ -60,6 +60,7 @@ public class HirerHomeFragment extends Fragment implements View.OnClickListener,
     public void newInstance(Callback callbackListener) {
         callback = callbackListener;
     }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

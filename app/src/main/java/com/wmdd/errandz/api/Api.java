@@ -20,7 +20,7 @@ public class Api {
 
         if(retrofit == null) {
             retrofit = new Retrofit.Builder()
-                    .baseUrl(Constants.LOCAL_BASE_URL)
+                    .baseUrl(Constants.BASE_URL)
 //                    .baseUrl(DEVELOPMENT_BASE_URL)
                     .client(createOkHttpClient())
                     .addConverterFactory(GsonConverterFactory.create())
