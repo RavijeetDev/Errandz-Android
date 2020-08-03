@@ -30,6 +30,7 @@ public class HirerJobDescriptionActivity extends AppCompatActivity {
     private TextView hirerEmailTextView;
     private ImageView userProfileImageView;
     private FrameLayout userProfileContainer;
+    private ImageView jobCategoryBackgroudImage;
 
     private Job job;
 
@@ -51,6 +52,7 @@ public class HirerJobDescriptionActivity extends AppCompatActivity {
         userProfileImageView = findViewById(R.id.user_profile_image_view);
         hirerNameTextView = findViewById(R.id.hirer_name_text_view);
         hirerEmailTextView = findViewById(R.id.hirer_email_text_view);
+        jobCategoryBackgroudImage = findViewById(R.id.job_category_background_image_view);
 
         initializeViewModel();
         initializeView();
@@ -61,7 +63,7 @@ public class HirerJobDescriptionActivity extends AppCompatActivity {
     private void initializeView() {
 
         job = getIntent().getParcelableExtra("JOB");
-
+        jobCategoryBackgroudImage.setImageResource(job.getJobCategoryImageBackground());
         jobCategoryImageView.setImageResource(job.getJobCategoryImage());
         jobWageTextView.setText("$" + job.getJobWage());
         jobNameTextView.setText(job.getJobName());

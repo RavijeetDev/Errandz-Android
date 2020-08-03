@@ -34,7 +34,7 @@ public class User implements Parcelable {
 
     private int numberOfReviews;
 
-    private float totalRating;
+    private double totalRating;
 
     private Address address;
 
@@ -48,7 +48,7 @@ public class User implements Parcelable {
         profileImage = in.readString();
         bio = in.readString();
         numberOfReviews = in.readInt();
-        totalRating = in.readFloat();
+        totalRating = in.readDouble();
         address = in.readParcelable(Address.class.getClassLoader());
     }
 
@@ -89,19 +89,19 @@ public class User implements Parcelable {
     }
 
     public String getProfileImage() {
-        return profileImage;
+        return profileImage == null ? "" : profileImage;
     }
 
     public String getBio() {
-        return bio;
+        return bio == null ? "" : bio;
     }
 
     public int getNumberOfReviews() {
         return numberOfReviews;
     }
 
-    public float getTotalRating() {
-        return totalRating/numberOfReviews;
+    public double getTotalRating() {
+        return totalRating;
     }
 
     public Address getAddress() {
@@ -161,7 +161,7 @@ public class User implements Parcelable {
         dest.writeString(profileImage);
         dest.writeString(bio);
         dest.writeInt(numberOfReviews);
-        dest.writeFloat(totalRating);
+        dest.writeDouble(totalRating);
         dest.writeParcelable(address, flags);
     }
 }

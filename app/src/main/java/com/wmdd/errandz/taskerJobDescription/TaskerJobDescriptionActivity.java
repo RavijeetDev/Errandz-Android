@@ -11,6 +11,8 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.format.DateUtils;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -49,6 +51,7 @@ public class TaskerJobDescriptionActivity extends AppCompatActivity implements O
     private ScrollView jobDescriptionContainer;
     private ImageView jobCategoryImageView;
     private ImageView hirerProfileImageView;
+    private ImageView jobCategoryBackgroundImageView;
     private TextView wageTextView;
     private TextView jobStatusTextView;
     private TextView jobNameTextView;
@@ -105,6 +108,7 @@ public class TaskerJobDescriptionActivity extends AppCompatActivity implements O
         startJobButton = findViewById(R.id.start_job_button);
         progressBarLayout = findViewById(R.id.progress_bar_view);
         buttonBackgroundBehindContainer = findViewById(R.id.button_background_behind_container);
+        jobCategoryBackgroundImageView = findViewById(R.id.job_category_background_image_view);
 
         jobID = getIntent().getIntExtra("JOB_ID", 0);
         hirerID = getIntent().getIntExtra("HIRER_ID", 0);
@@ -233,7 +237,7 @@ public class TaskerJobDescriptionActivity extends AppCompatActivity implements O
         jobDateTextView.setText(job.getJobDate());
         jobCategoryTextView.setText(job.getJobCategoryName());
         jobDescriptionTextView.setText(job.getDescription());
-
+        jobCategoryBackgroundImageView.setImageResource(job.getJobCategoryImageBackground());
 
         if (job.getStatus() == 1 || job.getStatus() == 2 || job.getStatus() == 3) {
 
@@ -320,7 +324,7 @@ public class TaskerJobDescriptionActivity extends AppCompatActivity implements O
 
         if (user.getTotalRating() > 0) {
             hirerRatingTextView.setText(String.format("%.1f", user.getTotalRating()));
-            hirerRatingRatingBar.setRating(user.getTotalRating() / 5);
+            hirerRatingRatingBar.setRating((float) (user.getTotalRating() / 5));
         } else {
             hirerRatingTextView.setText("No Rating");
             hirerRatingRatingBar.setVisibility(View.GONE);
@@ -353,5 +357,15 @@ public class TaskerJobDescriptionActivity extends AppCompatActivity implements O
                 googleMap.setMaxZoomPreference(13.0f);
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int width = displayMetrics.widthPixels;
+        Log.e("Width", width+"");
+        Log.e("Height", ""+getResources().getDimension(R.dimen.pixel_220));
     }
 }

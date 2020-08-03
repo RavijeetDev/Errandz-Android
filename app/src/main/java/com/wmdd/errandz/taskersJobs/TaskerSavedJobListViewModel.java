@@ -17,20 +17,27 @@ import retrofit2.Response;
 
 public class TaskerSavedJobListViewModel extends ViewModel {
 
+    private Prefs sharedPreference;
     private ErrandzApi errandzApi;
+
     private MutableLiveData<ArrayList<Job>> savedJobListMutableLiveData;
 
     public void init() {
+
+        sharedPreference = Prefs.getInstance();
         errandzApi = Api.getRetrofitClient().create(ErrandzApi.class);
+
         savedJobListMutableLiveData = new MutableLiveData<>();
 
     }
 
     public void makeTaskerSavedJobApiCall() {
 
-        int userId = Prefs.getInstance().getUserID();
+        int userId = sharedPreference.getUserID();
+        String idToken = sharedPreference.getIDToken();
+        String uid = sharedPreference.getUID();
 
-        errandzApi.taskerSavedJobListRequest(userId).enqueue(new Callback<JobListResponse>() {
+        errandzApi.taskerSavedJobListRequest(idToken, uid, userId).enqueue(new Callback<JobListResponse>() {
             @Override
             public void onResponse(Call<JobListResponse> call, Response<JobListResponse> response) {
                 if(response.isSuccessful()) {

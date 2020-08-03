@@ -9,10 +9,12 @@ import androidx.lifecycle.ViewModel;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
+import com.google.firebase.auth.GoogleAuthProvider;
 import com.wmdd.errandz.api.Api;
 import com.wmdd.errandz.api.ErrandzApi;
 import com.wmdd.errandz.bean.CommonResponse;
@@ -34,15 +36,13 @@ public class LoginViewModel extends ViewModel {
     private Prefs sharedPreferences;
     private FirebaseAuth firebaseAuth;
 
-    private MutableLiveData<Response> responseMutableLiveData;
+    private MutableLiveData<LoginResponse> responseMutableLiveData;
     private MutableLiveData<String> errorResponse;
 
     private String uId;
     private String idToken;
     private String emailID;
     private int loginType;
-
-
 
 
     public void init() {
@@ -91,6 +91,7 @@ public class LoginViewModel extends ViewModel {
                     public void onComplete(@NonNull Task<GetTokenResult> task) {
                         if (task.isSuccessful()) {
                             idToken = task.getResult().getToken();
+                            Log.e("ID Token", idToken);
                             makeLoginCall();
                         } else {
                             errorResponse.setValue(task.getException().getMessage());
@@ -100,8 +101,8 @@ public class LoginViewModel extends ViewModel {
     }
 
     private void makeLoginCall() {
-
-        errandzApi.loginRequest(emailID, uId, loginType, sharedPreferences.getToken()).enqueue(new Callback<LoginResponse>() {
+        Log.e("ID Token Login", idToken);
+        errandzApi.loginRequest(idToken, emailID, uId, loginType, sharedPreferences.getToken()).enqueue(new Callback<LoginResponse>() {
             @Override
             public void onResponse(Call<LoginResponse> call,
                                    retrofit2.Response<LoginResponse> loginResponse) {
@@ -120,10 +121,11 @@ public class LoginViewModel extends ViewModel {
                         sharedPreferences.saveFullAddress(user.getAddress().getFullAddress());
                     }
 
-                    responseMutableLiveData.setValue(loginResponse.body().getResponse());
+                    responseMutableLiveData.setValue(loginResponse.body());
                 } else {
-
-                    errorResponse.setValue("Google not registered");
+                    if(loginType == 2) {
+                        errorResponse.setValue("Google not registered");
+                    }
                 }
             }
 
@@ -134,30 +136,43 @@ public class LoginViewModel extends ViewModel {
         });
     }
 
-    public void loginWithGoogle(String uid, String emailID) {
+    public void loginWithGoogle(String emailID, String idToken, AppCompatActivity activity) {
 
         this.emailID = emailID;
-        this.uId = uid;
         this.loginType = 2;
+        this.idToken = idToken;
 
-        makeLoginCall();
+        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
+        firebaseAuth.signInWithCredential(credential)
+                .addOnCompleteListener(activity, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, "signInWithCredential:success");
+                            FirebaseUser user = firebaseAuth.getCurrentUser();
+                            uId = user.getUid();
+                            getIDToken();
+                        } else {
+                            errorResponse.setValue(task.getException().getMessage());
+                        }
+
+                    }
+                });
 
     }
 
-    public void makeGoogleLogin(String firstName, String lastName, String emailID,
-                                long dateOfBirthTimestamp, int userType, String profileImage, String uid) {
+    public void makeGoogleLogin(String firstName, String lastName, long dateOfBirthTimestamp,
+                                int userType, String profileImage) {
 
-        this.uId = uid;
-        this.emailID = emailID;
-        this.loginType = 2;
 
-        errandzApi.signUpApiRequest(firstName, lastName, dateOfBirthTimestamp, emailID, userType, loginType, uid, profileImage)
+        errandzApi.signUpApiRequest(firstName, lastName, dateOfBirthTimestamp, emailID, userType,
+                loginType, uId, profileImage)
                 .enqueue(new Callback<CommonResponse>() {
                     @Override
                     public void onResponse(Call<CommonResponse> call,
                                            retrofit2.Response<CommonResponse> response) {
-                        if (response.isSuccessful() && response.body().getResponse().getStatus().equals("success")) {
-
+                        if (response.isSuccessful() && response.body().getResponse().getStatus()
+                                .equals("success")) {
                             makeLoginCall();
 
                         }
@@ -170,7 +185,8 @@ public class LoginViewModel extends ViewModel {
                 });
     }
 
-    public MutableLiveData<Response> getLoginResponse() {
+
+    public MutableLiveData<LoginResponse> getLoginResponse() {
         return responseMutableLiveData;
     }
 

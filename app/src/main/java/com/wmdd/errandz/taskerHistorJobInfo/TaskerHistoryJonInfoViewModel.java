@@ -23,24 +23,37 @@ import retrofit2.Response;
 
 public class TaskerHistoryJonInfoViewModel extends ViewModel {
 
+    private Prefs sharedPreference;
     private ErrandzApi errandzApi;
+
     private MutableLiveData<User> userMutableLiveData;
     private MutableLiveData<Job> jobMutableLiveData;
     private MutableLiveData<ArrayList<Review>> reviewList;
     private MutableLiveData<com.wmdd.errandz.bean.Response> newReviewAddedResponse;
 
+    private String idToken;
+    private String uid;
+
     public void init() {
+
+        sharedPreference = Prefs.getInstance();
         errandzApi = Api.getRetrofitClient().create(ErrandzApi.class);
+
         jobMutableLiveData = new MutableLiveData<>();
         userMutableLiveData = new MutableLiveData<>();
         reviewList = new MutableLiveData<>();
         newReviewAddedResponse = new MutableLiveData<>();
+
+        idToken = sharedPreference.getIDToken();
+        uid = sharedPreference.getUID();
+
     }
 
     public void makeHistoryJobInfoApiCall(int hirerID, int jobID) {
 
-        int userID = Prefs.getInstance().getUserID();
-        errandzApi.taskerJobInfoHistoryRequest(jobID, userID, hirerID).enqueue(new Callback<JobInfoResponse>() {
+        int userID = sharedPreference.getUserID();
+
+        errandzApi.taskerJobInfoHistoryRequest(idToken, uid, jobID, userID, hirerID).enqueue(new Callback<JobInfoResponse>() {
             @Override
             public void onResponse(Call<JobInfoResponse> call, Response<JobInfoResponse> response) {
                 if (response.isSuccessful()) {
@@ -60,7 +73,7 @@ public class TaskerHistoryJonInfoViewModel extends ViewModel {
     public void makeJobReviewApiCall(int jobID) {
 
 
-        errandzApi.jobReviewListCall(jobID, Prefs.getInstance().getUserID()).enqueue(new Callback<UserReviewResponse>() {
+        errandzApi.jobReviewListCall(idToken, uid, jobID, Prefs.getInstance().getUserID()).enqueue(new Callback<UserReviewResponse>() {
             @Override
             public void onResponse(Call<UserReviewResponse> call, Response<UserReviewResponse> response) {
                 if (response.isSuccessful()) {
@@ -78,7 +91,8 @@ public class TaskerHistoryJonInfoViewModel extends ViewModel {
 
     public void makeNewReviewCall(int jobID, int taskerID, float rating, String review) {
 
-        errandzApi.addNewReviewRequest(jobID, taskerID, Prefs.getInstance().getUserID(), rating, review).enqueue(new Callback<CommonResponse>() {
+        errandzApi.addNewReviewRequest(idToken, uid, jobID, taskerID, Prefs.getInstance().getUserID(),
+                rating, review).enqueue(new Callback<CommonResponse>() {
             @Override
             public void onResponse(Call<CommonResponse> call, Response<CommonResponse> response) {
                 if (response.isSuccessful()) {

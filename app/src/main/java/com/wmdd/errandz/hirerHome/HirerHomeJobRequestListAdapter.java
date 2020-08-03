@@ -92,8 +92,8 @@ public class HirerHomeJobRequestListAdapter extends RecyclerView.Adapter<HirerHo
             if(jobDescription.getUser().getTotalRating() > 0) {
                 taskerRatingBar.setVisibility(View.VISIBLE);
                 taskerRatingTextView.setVisibility(View.GONE);
-                taskerRatingBar.setRating(jobDescription.getUser().getTotalRating() /
-                        jobDescription.getUser().getNumberOfReviews());
+                taskerRatingBar.setRating((float) (jobDescription.getUser().getTotalRating() /
+                                        jobDescription.getUser().getNumberOfReviews()));
             } else {
                 taskerRatingTextView.setVisibility(View.VISIBLE);
                 taskerRatingBar.setVisibility(View.GONE);

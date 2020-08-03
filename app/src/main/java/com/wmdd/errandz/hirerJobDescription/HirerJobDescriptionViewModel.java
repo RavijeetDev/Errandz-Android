@@ -18,17 +18,23 @@ import retrofit2.Response;
 
 public class HirerJobDescriptionViewModel extends ViewModel {
 
+    private Prefs sharedPreference;
     private ErrandzApi errandzApi;
+
     private MutableLiveData<JobDescription> jobDescriptionMutableLiveData;
 
     public void init() {
+        sharedPreference = Prefs.getInstance();
         errandzApi = Api.getRetrofitClient().create(ErrandzApi.class);
         jobDescriptionMutableLiveData = new MutableLiveData<>();
     }
 
     public void makeJobInfoAPiCall(int jobID) {
 
-        errandzApi.hirerJobInfoRequest(jobID)
+        String idToken = sharedPreference.getIDToken();
+        String uid = sharedPreference.getUID();
+
+        errandzApi.hirerJobInfoRequest(idToken, uid, jobID)
                 .enqueue(new Callback<JobInfoResponse>() {
                     @Override
                     public void onResponse(Call<JobInfoResponse> call, Response<JobInfoResponse> response) {

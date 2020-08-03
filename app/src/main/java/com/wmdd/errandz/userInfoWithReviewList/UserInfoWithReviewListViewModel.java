@@ -18,18 +18,26 @@ import retrofit2.Response;
 
 public class UserInfoWithReviewListViewModel extends ViewModel {
 
+    private Prefs sharedPreference;
     private ErrandzApi errandzApi;
+
     private MutableLiveData<ArrayList<Review>> reviewArrayList;
 
     public void init() {
+
+        sharedPreference = Prefs.getInstance();
         errandzApi = Api.getRetrofitClient().create(ErrandzApi.class);
+
         reviewArrayList = new MutableLiveData<>();
 
     }
 
     public void makeUserReviewApiCall(int hirerId) {
 
-        errandzApi.userReviewListRequest(hirerId).enqueue(new Callback<UserReviewResponse>() {
+        String idToken = sharedPreference.getIDToken();
+        String uid = sharedPreference.getUID();
+
+        errandzApi.userReviewListRequest(idToken, uid, hirerId).enqueue(new Callback<UserReviewResponse>() {
             @Override
             public void onResponse(Call<UserReviewResponse> call, Response<UserReviewResponse> response) {
                 if (response.isSuccessful()) {

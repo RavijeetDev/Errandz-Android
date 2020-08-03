@@ -15,20 +15,28 @@ import retrofit2.Response;
 
 public class UserProfileViewModel extends ViewModel {
 
+    private Prefs sharedPreference;
     private ErrandzApi errandzApi;
+
     private MutableLiveData<User> userMutableLiveData;
 
     public void init() {
+
+        sharedPreference = Prefs.getInstance();
         errandzApi = Api.getRetrofitClient().create(ErrandzApi.class);
+
         userMutableLiveData = new MutableLiveData<>();
+
         makeUserInfoApiCall();
     }
 
     public void makeUserInfoApiCall() {
 
-        int userID = Prefs.getInstance().getUserID();
+        int userId = sharedPreference.getUserID();
+        String idToken = sharedPreference.getIDToken();
+        String uid = sharedPreference.getUID();
 
-        errandzApi.userInfoRequest(userID).enqueue(new Callback<UserInfoResponse>() {
+        errandzApi.userInfoRequest(idToken, uid, userId).enqueue(new Callback<UserInfoResponse>() {
             @Override
             public void onResponse(Call<UserInfoResponse> call, Response<UserInfoResponse> response) {
                 if(response.isSuccessful()) {

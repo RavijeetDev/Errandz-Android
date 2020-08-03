@@ -1,4 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="test">20dp</dimen>
+
+    <dimen name="edit_profile_change_image_bottom_sheet_add_photo_label_margin_start">14dp</dimen>
+    <dimen name="edit_profile_change_image_bottom_sheet_add_photo_label_margin_top">17dp</dimen>
+    <dimen name="edit_profile_change_image_bottom_sheet_add_photo_label_text_size">15sp</dimen>
+    <dimen name="edit_profile_change_image_bottom_sheet_take_picture_icon_size">25dp</dimen>
+    <dimen name="edit_profile_change_image_bottom_sheet_take_picture_margin_top">14dp</dimen>
+    <dimen name="edit_profile_change_image_bottom_sheet_take_picture_margin_start">13dp</dimen>
+    <dimen name="edit_profile_change_image_bottom_sheet_take_picture_text_size">14sp</dimen>
+    <dimen name="edit_profile_change_image_bottom_sheet_gallery_icon_margin_top">14dp</dimen>
+    <dimen name="edit_profile_change_image_bottom_sheet_gallery_icon_margin_bottom">17dp</dimen>
+    <dimen name="pixel_220">220dp</dimen>
 </resources>

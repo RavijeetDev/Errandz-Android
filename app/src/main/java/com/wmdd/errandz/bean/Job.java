@@ -116,6 +116,10 @@ public class Job implements Parcelable {
         return Constants.jobCategoryIcon[jobCategory - 1];
     }
 
+    public int getJobCategoryImageBackground() {
+        return Constants.jobCategoryImage[jobCategory - 1];
+    }
+
     public void setStatus(int status) {
         this.status = status;
     }

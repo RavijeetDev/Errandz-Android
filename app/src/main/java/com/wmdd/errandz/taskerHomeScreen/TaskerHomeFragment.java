@@ -77,23 +77,27 @@ public class TaskerHomeFragment extends Fragment implements TaskerHomeUpcomingJo
         progressBarLayout.setVisibility(View.VISIBLE);
 
         taskerHomeViewModel.getApprovedJobList().observe(this, jobList -> {
-            approvedJobList = jobList;
-            illustrationImageView.setVisibility(View.GONE);
-            approvedJobsLabel.setVisibility(View.VISIBLE);
-            approvedJobsRecyclerView.setVisibility(View.VISIBLE);
-            upcomingApprovedJobListAdapter.setUpcomingJobList(jobList);
+            if (jobList.size() > 0) {
+                approvedJobList = jobList;
+                illustrationImageView.setVisibility(View.GONE);
+                approvedJobsLabel.setVisibility(View.VISIBLE);
+                approvedJobsRecyclerView.setVisibility(View.VISIBLE);
+                upcomingApprovedJobListAdapter.setUpcomingJobList(jobList);
+            }
         });
 
         taskerHomeViewModel.getUpcomingJobList().observe(this, jobList -> {
             upcomingJobList = jobList;
             if (approvedJobList == null || approvedJobList.size() == 0)
                 illustrationImageView.setVisibility(View.VISIBLE);
-            else
+            else {
                 illustrationImageView.setVisibility(View.GONE);
+            }
             nearbyJobsLabel.setVisibility(View.VISIBLE);
             nearbyJobsRecyclerView.setVisibility(View.VISIBLE);
             taskerHomeUpcomingJobListAdapter.setUpcomingJobList(jobList);
             progressBarLayout.setVisibility(View.GONE);
+
         });
 
         taskerHomeViewModel.getSavedResponse().observe(this, response -> {

@@ -20,7 +20,9 @@ import retrofit2.Response;
 
 public class TaskerJobDescriptionViewModel extends ViewModel {
 
+    private Prefs sharedPreference;
     private ErrandzApi errandzApi;
+
     private MutableLiveData<User> userMutableLiveData;
     private MutableLiveData<Job> jobMutableLiveData;
     private MutableLiveData<com.wmdd.errandz.bean.Response> responseMutableLiveData;
@@ -28,20 +30,30 @@ public class TaskerJobDescriptionViewModel extends ViewModel {
     private MutableLiveData<com.wmdd.errandz.bean.Response> jobStartedMutableLiveData;
     private MutableLiveData<com.wmdd.errandz.bean.Response> jobCompletedMutableLiveData;
 
+    private String idToken;
+    private String uid;
+    private int userId;
+
     public void init() {
+
+        sharedPreference = Prefs.getInstance();
         errandzApi = Api.getRetrofitClient().create(ErrandzApi.class);
+
         jobMutableLiveData = new MutableLiveData<>();
         userMutableLiveData = new MutableLiveData<>();
         responseMutableLiveData = new MutableLiveData<>();
         savedMutableLiveData = new MutableLiveData<>();
         jobStartedMutableLiveData = new MutableLiveData<>();
         jobCompletedMutableLiveData = new MutableLiveData<>();
+
+        userId = sharedPreference.getUserID();
+        idToken = sharedPreference.getIDToken();
+        uid = sharedPreference.getUID();
     }
 
     public void makeJobInfoApiCall(int hirerId, int jobID) {
 
-        int userID = Prefs.getInstance().getUserID();
-        errandzApi.taskerJobInfoRequest(jobID, hirerId, userID).enqueue(new Callback<JobInfoResponse>() {
+        errandzApi.taskerJobInfoRequest(idToken, uid, jobID, hirerId, userId).enqueue(new Callback<JobInfoResponse>() {
             @Override
             public void onResponse(Call<JobInfoResponse> call, Response<JobInfoResponse> response) {
                 if (response.isSuccessful()) {
@@ -60,8 +72,8 @@ public class TaskerJobDescriptionViewModel extends ViewModel {
 
     public void makeApplyJobApiCall(Job job) {
 
-        int userID = Prefs.getInstance().getUserID();
-        errandzApi.updateJobStatus(userID, job.getHirerID(), job.getJobID(), 1, job.getJobStatusID()).enqueue(new Callback<CommonResponse>() {
+        errandzApi.updateJobStatus(idToken, uid, userId, job.getHirerID(), job.getJobID(), 1,
+                job.getJobStatusID()).enqueue(new Callback<CommonResponse>() {
             @Override
             public void onResponse(Call<CommonResponse> call, Response<CommonResponse> response) {
                 if (response.isSuccessful()) {
@@ -79,9 +91,8 @@ public class TaskerJobDescriptionViewModel extends ViewModel {
 
     public void saveJob(Job job) {
 
-        int userId = Prefs.getInstance().getUserID();
-
-        errandzApi.updateJobStatus(userId, job.getHirerID(), job.getJobID(), 4, job.getJobStatusID()).enqueue(new Callback<CommonResponse>() {
+        errandzApi.updateJobStatus(idToken, uid, userId, job.getHirerID(), job.getJobID(), 4,
+                job.getJobStatusID()).enqueue(new Callback<CommonResponse>() {
             @Override
             public void onResponse(Call<CommonResponse> call, Response<CommonResponse> response) {
                 if(response.isSuccessful()) {
@@ -98,7 +109,7 @@ public class TaskerJobDescriptionViewModel extends ViewModel {
 
     public void unsaveJob(Job job) {
 
-        errandzApi.unsaveJob(job.getJobStatusID()).enqueue(new Callback<CommonResponse>() {
+        errandzApi.unsaveJob(idToken, uid, job.getJobStatusID()).enqueue(new Callback<CommonResponse>() {
             @Override
             public void onResponse(Call<CommonResponse> call, Response<CommonResponse> response) {
                 if(response.isSuccessful()) {
@@ -115,7 +126,7 @@ public class TaskerJobDescriptionViewModel extends ViewModel {
 
     public void setJobStatusStartedApiCall(int hirerID, int jobID, int jobStatusID) {
 
-        errandzApi.updateJobStatus(Prefs.getInstance().getUserID(), hirerID, jobID, 5, jobStatusID).enqueue(new Callback<CommonResponse>() {
+        errandzApi.updateJobStatus(idToken, uid, userId, hirerID, jobID, 5, jobStatusID).enqueue(new Callback<CommonResponse>() {
             @Override
             public void onResponse(Call<CommonResponse> call, Response<CommonResponse> response) {
                 if(response.isSuccessful()) {
@@ -131,7 +142,7 @@ public class TaskerJobDescriptionViewModel extends ViewModel {
     }
 
     public void setCompleteStatusOFJob(int hirerID, int jobID, int jobStatusID) {
-        errandzApi.updateJobStatus(Prefs.getInstance().getUserID(), hirerID, jobID, 6, jobStatusID).enqueue(new Callback<CommonResponse>() {
+        errandzApi.updateJobStatus(idToken, uid, userId, hirerID, jobID, 6, jobStatusID).enqueue(new Callback<CommonResponse>() {
             @Override
             public void onResponse(Call<CommonResponse> call, Response<CommonResponse> response) {
                 if(response.isSuccessful()) {

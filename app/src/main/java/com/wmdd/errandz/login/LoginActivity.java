@@ -22,13 +22,6 @@ import com.wmdd.errandz.taskerHomeScreen.TaskerHomeActivity;
 
 public class LoginActivity extends AppCompatActivity implements AddMoreInfoFragment.CallbackListener {
 
-    private LoginViewModel loginViewModel;
-    private TextInputLayout emailIDTextInputLayout;
-    private TextInputLayout passwordTextInputLayout;
-    private Button loginButton;
-    private FrameLayout progressBarLayout;
-
-    private ActivityLoginBinding activityLoginBinding;
     private LoginFragment loginFragment;
 
     @Override

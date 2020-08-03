@@ -18,11 +18,14 @@ import retrofit2.Response;
 
 public class HirerHomeViewModel extends ViewModel {
 
+    private Prefs sharedPreference;
     private ErrandzApi errandzApi;
+
     private MutableLiveData<ArrayList<JobDescription>> jobArrayList;
     private MutableLiveData<Integer> numberOfJobs;
 
     public void init() {
+        sharedPreference = Prefs.getInstance();
         errandzApi = Api.getRetrofitClient().create(ErrandzApi.class);
         jobArrayList = new MutableLiveData<>();
         numberOfJobs = new MutableLiveData<>();
@@ -31,9 +34,11 @@ public class HirerHomeViewModel extends ViewModel {
 
     public void makeHirerHomeDataApiCall() {
 
-        int userID = Prefs.getInstance().getUserID();
+        int userID = sharedPreference.getUserID();
+        String idToken = sharedPreference.getIDToken();
+        String uid = sharedPreference.getUID();
 
-        errandzApi.hirerHomeDataResponse(userID).enqueue(new Callback<HirerHomeResponse>() {
+        errandzApi.hirerHomeDataResponse(idToken, uid, userID).enqueue(new Callback<HirerHomeResponse>() {
             @Override
             public void onResponse(Call<HirerHomeResponse> call, Response<HirerHomeResponse> response) {
                 if(response.isSuccessful()) {

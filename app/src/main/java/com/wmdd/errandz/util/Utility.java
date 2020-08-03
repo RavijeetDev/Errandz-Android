@@ -9,7 +9,9 @@ import androidx.core.content.ContextCompat;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.wmdd.errandz.R;
+import com.wmdd.errandz.main.ErrandzApplication;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -78,6 +80,26 @@ public class Utility {
         snackBarTextView.setTextColor(Color.WHITE);
         snackbar.setActionTextColor(ContextCompat.getColor(context, R.color.colorPrimary));
 
+    }
+
+    /**
+     * ------------------------ temporary file path ------------------------
+     */
+    public static File createTempImageFile() {
+        try {
+            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss",
+                    Locale.getDefault()).format(new Date());
+            String imageFileName = "JPEG_" + timeStamp + "_";
+            File storageDir = ErrandzApplication.getInstance().getExternalCacheDir();
+
+            return File.createTempFile(
+                    imageFileName,
+                    ".jpg",
+                    storageDir
+            );
+        } catch (Exception e) {
+            return null;
+        }
     }
 
 }
