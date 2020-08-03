@@ -4,10 +4,10 @@ import com.wmdd.errandz.R;
 
 public interface Constants {
 
-    String BASE_URL = "http://192.168.1.80:3000/";  // Local Machine
+//    String BASE_URL = "http://192.168.1.80:3000/";  // Local Machine
 
     // IP for Server Hosted on AWS EC2 Instance
-//    String BASE_URL = "http://54.167.159.136:3000/";
+    String BASE_URL = "http://54.167.159.136:3000/";
 
     int HIRER = 1;
     int TASKER = 2;
