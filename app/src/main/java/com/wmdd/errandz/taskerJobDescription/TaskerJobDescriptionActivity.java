@@ -323,8 +323,8 @@ public class TaskerJobDescriptionActivity extends AppCompatActivity implements O
         hirerNameTextView.setText(user.getFirstName() + " " + user.getLastName());
 
         if (user.getTotalRating() > 0) {
-            hirerRatingTextView.setText(String.format("%.1f", user.getTotalRating()));
-            hirerRatingRatingBar.setRating((float) (user.getTotalRating() / 5));
+            hirerRatingTextView.setText(String.format("%.1f", user.getTotalRating()/user.getNumberOfReviews()));
+            hirerRatingRatingBar.setRating((float) (user.getTotalRating() / user.getNumberOfReviews()));
         } else {
             hirerRatingTextView.setText("No Rating");
             hirerRatingRatingBar.setVisibility(View.GONE);
