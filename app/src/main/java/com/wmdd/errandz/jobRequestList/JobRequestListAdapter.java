@@ -93,7 +93,8 @@ public class JobRequestListAdapter extends RecyclerView.Adapter<JobRequestListAd
                 taskerRatingBar.setVisibility(View.VISIBLE);
                 taskerRatingBar.setRating((float) (jobDescription.getUser().getTotalRating() /
                                         jobDescription.getUser().getNumberOfReviews()));
-                taskerRatingTextView.setText(String.format("%.1f", jobDescription.getUser().getTotalRating()));
+                taskerRatingTextView.setText(String.format("%.1f", jobDescription.getUser().getTotalRating()
+                        /jobDescription.getUser().getNumberOfReviews()));
             } else {
                 taskerRatingTextView.setText("No rating");
             }

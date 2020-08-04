@@ -109,8 +109,8 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
             userEmailTextView.setText(userInfo.getEmailID());
 
             if (userInfo.getTotalRating() > 0) {
-                userRatingTextView.setText(String.format("%.1f", userInfo.getTotalRating()));
-                userRatingBar.setRating((float) userInfo.getTotalRating());
+                userRatingTextView.setText(String.format("%.1f", userInfo.getTotalRating()/userInfo.getNumberOfReviews()));
+                userRatingBar.setRating((float) userInfo.getTotalRating()/userInfo.getNumberOfReviews());
                 userRatingBar.setVisibility(View.VISIBLE);
             } else {
                 userRatingTextView.setText("No Rating");

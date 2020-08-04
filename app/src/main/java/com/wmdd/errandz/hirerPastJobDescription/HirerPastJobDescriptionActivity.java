@@ -47,6 +47,7 @@ public class HirerPastJobDescriptionActivity extends AppCompatActivity implement
     private CardView hirerReviewContainer;
     private ImageView hirerReviewEditButton;
     private ImageView hirerProfileImageView;
+    private ImageView jobCategoryBackgroundImageView;
     private TextView hirerNameTextView;
     private RatingBar hirerRatingBar;
     private TextView hirerReviewPostedDateTextView;
@@ -76,6 +77,7 @@ public class HirerPastJobDescriptionActivity extends AppCompatActivity implement
 
         toolbar = findViewById(R.id.add_job_toolbar);
         jobCategoryImageView = findViewById(R.id.job_category_image_view);
+        jobCategoryBackgroundImageView = findViewById(R.id.job_category_background_image_view);
         jobWageTextView = findViewById(R.id.job_wage_label);
         jobNameTextView = findViewById(R.id.job_name_label);
         jobDateTextView = findViewById(R.id.job_date_label);
@@ -177,7 +179,7 @@ public class HirerPastJobDescriptionActivity extends AppCompatActivity implement
         taskerNameTextView.setText(user.getFirstName() + " " + user.getLastName());
 
         if (user.getTotalRating() > 0) {
-            taskerRatingTextView.setText(String.format("%.1f", user.getTotalRating()));
+            taskerRatingTextView.setText(String.format("%.1f", user.getTotalRating()/user.getNumberOfReviews()));
             taskerRatingBar.setRating((float) (user.getTotalRating() / user.getNumberOfReviews()));
         } else {
             taskerRatingTextView.setText("No Rating");
@@ -191,6 +193,7 @@ public class HirerPastJobDescriptionActivity extends AppCompatActivity implement
     private void setJobValues(Job job) {
 
         jobCategoryImageView.setImageResource(job.getJobCategoryImage());
+        jobCategoryBackgroundImageView.setImageResource(job.getJobCategoryImageBackground());
         jobWageTextView.setText("$" + job.getJobWage());
         jobNameTextView.setText(job.getJobName());
         jobDateTextView.setText(job.getJobDate());

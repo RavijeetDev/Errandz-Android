@@ -83,8 +83,8 @@ public class UserInfoWithReviewListActivity extends AppCompatActivity {
         }
 
         if (user.getTotalRating() > 0) {
-            userRatingTextView.setText(String.format("%.1f", user.getTotalRating()));
-            userRatingBar.setRating((float) user.getTotalRating());
+            userRatingTextView.setText(String.format("%.1f", user.getTotalRating()/user.getNumberOfReviews()));
+            userRatingBar.setRating((float) user.getTotalRating()/user.getNumberOfReviews());
         } else {
             userRatingTextView.setText("No Rating");
             userRatingBar.setVisibility(View.GONE);
