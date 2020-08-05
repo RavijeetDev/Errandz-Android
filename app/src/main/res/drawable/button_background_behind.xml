@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
 
-    <gradient android:startColor="@android:color/transparent"
-        android:centerColor="#B5FFFFFF"
-        android:centerY="0.4"
-        android:endColor="#DAFFFFFF"/>
+    <gradient
+        android:angle="90"
+        android:centerY="0.6"
+        android:startColor="#FFFFFF"
+        android:centerColor="#FFF"
+        android:endColor="@android:color/transparent"
+        android:type="linear"/>
 </shape>
+
+<!--<gradient android:startColor="@android:color/transparent"-->
+<!--android:centerColor="#B5FFFFFF"-->
+<!--android:centerY="0.4"-->
+<!--android:endColor="#DAFFFFFF"/>-->

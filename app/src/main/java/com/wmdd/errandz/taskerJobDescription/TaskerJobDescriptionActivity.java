@@ -245,8 +245,10 @@ public class TaskerJobDescriptionActivity extends AppCompatActivity implements O
         switch (job.getStatus()) {
             case 0:
                 saveButton.setText("Save");
+                showMap(false);
             case 1:
                 jobStatusTextView.setText("Waiting for Approval");
+                showMap(false);
                 break;
             case 2:
                 setViewsOnJobApproved();
@@ -255,13 +257,14 @@ public class TaskerJobDescriptionActivity extends AppCompatActivity implements O
                 jobStatusTextView.setText("Rejected");
             case 4:
                 saveButton.setText("Unsave");
+                showMap(false);
                 break;
             case 5:
                 jobStatusTextView.setText("Ongoing");
                 startJobButton.setText("Job Completed");
                 startJobButton.setVisibility(View.VISIBLE);
                 buttonBackgroundBehindContainer.setVisibility(View.VISIBLE);
-                showMap();
+                showMap(true);
                 break;
 
         }
@@ -290,14 +293,16 @@ public class TaskerJobDescriptionActivity extends AppCompatActivity implements O
             buttonBackgroundBehindContainer.setVisibility(View.GONE);
         }
 
-        showMap();
+        showMap(true);
     }
 
-    private void showMap() {
+    private void showMap(boolean showAddress) {
         hirerAddressHeadingLabel.setVisibility(View.VISIBLE);
-        hirerAddressTextView.setVisibility(View.VISIBLE);
-        hirerAddressTextView.setText(user.getAddress().getFullAddress());
-        getDirectionTextView.setVisibility(View.VISIBLE);
+        if(showAddress) {
+            hirerAddressTextView.setVisibility(View.VISIBLE);
+            hirerAddressTextView.setText(user.getAddress().getFullAddress());
+            getDirectionTextView.setVisibility(View.VISIBLE);
+        }
         hirerMapViewContainer.setVisibility(View.VISIBLE);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -346,13 +351,18 @@ public class TaskerJobDescriptionActivity extends AppCompatActivity implements O
             public void onMapLoaded() {
                 LatLng position = new LatLng(Double.parseDouble(user.getAddress().getLatitude()), Double.parseDouble(user.getAddress().getLongitude()));
                 googleMap.moveCamera(CameraUpdateFactory.newLatLng(position));
-                googleMap.addMarker(new MarkerOptions()
-                        .position(position));
-//                googleMap.addCircle(new CircleOptions()
-//                        .center(position)
-//                        .radius(750)
-//                        .strokeColor(ContextCompat.getColor(getApplicationContext(), R.color.map_stroke))
-//                        .fillColor(ContextCompat.getColor(getApplicationContext(), R.color.map_fill)));
+                if(job.getStatus() == 2 || job.getStatus() == 5) {
+
+                    googleMap.addMarker(new MarkerOptions()
+                            .position(position));
+
+                } else if(job.getStatus() == 0 || job.getStatus() == 4) {
+                    googleMap.addCircle(new CircleOptions()
+                            .center(position)
+                            .radius(750)
+                            .strokeColor(ContextCompat.getColor(getApplicationContext(), R.color.map_stroke))
+                            .fillColor(ContextCompat.getColor(getApplicationContext(), R.color.map_fill)));
+                }
                 googleMap.setMinZoomPreference(13.0f);
                 googleMap.setMaxZoomPreference(13.0f);
             }
